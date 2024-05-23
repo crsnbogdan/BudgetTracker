@@ -1,8 +1,7 @@
 import React from "react";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TextField, Box, Typography } from "@mui/material";
-import "./DateRangeFilter.css";
+import { Box } from "@mui/material";
+import Input from "../Input/Input";
+import styles from "./DateRangeFilter.module.css";
 
 const DateRangeFilter = ({
   startDate,
@@ -11,42 +10,19 @@ const DateRangeFilter = ({
   onEndDateChange,
 }) => {
   return (
-    <Box className="date-range-filter">
-      <Typography style={{ color: "#a3a3ff" }}>Date</Typography>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label={!startDate && "Start Date"}
-          value={startDate}
-          onChange={onStartDateChange}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                style: { backgroundColor: "#1e1e3a", color: "#ffffff" },
-              }}
-              InputLabelProps={{ style: { color: "#a3a3ff" } }}
-            />
-          )}
-        />
-        <DatePicker
-          label={!endDate && "End Date"}
-          value={endDate}
-          onChange={onEndDateChange}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                style: { backgroundColor: "#1e1e3a", color: "#ffffff" },
-              }}
-              InputLabelProps={{ style: { color: "#a3a3ff" } }}
-            />
-          )}
-        />
-      </LocalizationProvider>
+    <Box className={styles["date-range-filter"]}>
+      <Input
+        type="date"
+        label="Start Date"
+        value={startDate}
+        onChange={onStartDateChange}
+      />
+      <Input
+        type="date"
+        label="End Date"
+        value={endDate}
+        onChange={onEndDateChange}
+      />
     </Box>
   );
 };

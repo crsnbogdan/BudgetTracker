@@ -1,0 +1,20 @@
+.popover-container {
+  position: relative;
+  padding: 20px;
+  background-color: #2c2c54;
+  color: #ffffff;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: #5a67d8;
+  transition: color 0.3s ease;
+  z-index: 1000;
+}
+
+.close-button:hover {
+  color: #434190;
+}

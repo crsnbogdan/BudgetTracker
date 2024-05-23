@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import CategoryFilter from "../UI/CategoryFilter/CategoryFilter";
-import DateRangeFilter from "../UI/DateRangeFilter/DateRangeFilter";
-import PriceRangeFilter from "../UI/PriceRangeFilter/PriceRangeFilter";
-import { Box } from "@mui/material";
-import { AppContext } from "../../Context/ContextProvider";
-import "./Filters.css";
+import CategoryFilter from "../../UI/CategoryFilter/CategoryFilter";
+import DateRangeFilter from "../../UI/DateRangeFilter/DateRangeFilter";
+import PriceRangeFilter from "../../UI/PriceRangeFilter/PriceRangeFilter";
+import { Box, Typography } from "@mui/material";
+import { AppContext } from "../../../Context/ContextProvider";
+import styles from "./Filters.module.css";
 
 const Filters = () => {
   const { state, updateFilters } = useContext(AppContext);
@@ -50,19 +50,26 @@ const Filters = () => {
   };
 
   return (
-    <Box className="expenses-list">
-      <Box className="filters-section">
+    <Box className={styles["form-container"]}>
+      <Typography variant="h6" className={styles["form-header"]}>
+        Filters
+      </Typography>
+      <Box className={styles["form-row"]}>
         <CategoryFilter
           selectedCategories={state.filters.categories}
           handleCategoryChange={handleCategoryChange}
           categories={state.categories}
         />
+      </Box>
+      <Box className={styles["form-row"]}>
         <DateRangeFilter
           startDate={state.filters.dateRange.startDate}
           endDate={state.filters.dateRange.endDate}
           onStartDateChange={handleStartDateChange}
           onEndDateChange={handleEndDateChange}
         />
+      </Box>
+      <Box className={styles["form-row"]}>
         <PriceRangeFilter
           minPrice={state.filters.priceRange.minPrice}
           maxPrice={state.filters.priceRange.maxPrice}

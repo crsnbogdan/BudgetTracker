@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { AppContext } from "../../Context/ContextProvider";
+import { AppContext } from "../../../Context/ContextProvider";
 import "./BudgetGraphs.css";
 
 const BudgetGraphs = () => {

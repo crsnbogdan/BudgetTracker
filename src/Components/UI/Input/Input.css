@@ -1,0 +1,27 @@
+.MuiInputBase-root {
+  margin: 7px 0 !important;
+}
+
+.MuiOutlinedInput-root {
+  background-color: #1e1e3a;
+  color: #ffffff !important;
+  height: 48px;
+}
+
+.MuiInputBase-input {
+  color: #ffffff;
+}
+
+.MuiFormLabel-root {
+  color: white !important;
+  font-size: 16px !important;
+  margin-top: 3px !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+.MuiSvgIcon-root {
+  color: #ffffff !important;
+}

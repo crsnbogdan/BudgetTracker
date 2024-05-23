@@ -10,7 +10,6 @@ const CategoryFilter = ({
 }) => {
   return (
     <div className="category-filter">
-      <Typography style={{ color: "#a3a3ff" }}>Category</Typography>
       <CategoryDropdown
         category={selectedCategories}
         categories={categories}

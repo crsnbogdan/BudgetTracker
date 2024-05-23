@@ -9,11 +9,16 @@ import {
   ListItemText,
   FormControlLabel,
 } from "@mui/material";
-import "./CategoryDropdown.css";
+import styles from "./CategoryDropdown.module.css";
 
 const CategoryDropdown = ({ categories, category, onChange, multiple }) => {
   return (
-    <FormControl fullWidth variant="outlined" className="category-dropdown">
+    <FormControl
+      fullWidth
+      variant="outlined"
+      className={styles.categoryDropdown}
+    >
+      <InputLabel className={styles.formLabel}>Category</InputLabel>
       <Select
         multiple={multiple}
         value={category}
@@ -24,10 +29,9 @@ const CategoryDropdown = ({ categories, category, onChange, multiple }) => {
             ? selected.join(", ")
             : categories[selected]?.name || "Select a category"
         }
+        className={styles.outlinedInputRoot}
         style={{
-          backgroundColor: "#1e1e3a",
-          color: "#ffffff",
-          borderColor: "#444",
+          borderColor: categories[category]?.color || "#444",
         }}
         MenuProps={{
           PaperProps: {

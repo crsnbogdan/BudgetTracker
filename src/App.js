@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import "./App.css";
 import { AppContext } from "./Context/ContextProvider";
-import ExpenseList from "./Components/ExpenseList/ExpenseList";
-import BudgetGraphs from "./Components/BudgetGraphs/BudgetGraphs";
+import ExpenseList from "./Components/Containers/ExpenseList/ExpenseList";
+import BudgetGraphs from "./Components/Containers/BudgetGraphs/BudgetGraphs";
 import { Box, Typography, styled, IconButton } from "@mui/material";
 
 const StyledButton = styled(Box)({

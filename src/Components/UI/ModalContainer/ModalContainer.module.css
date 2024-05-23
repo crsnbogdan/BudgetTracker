@@ -1,9 +1,9 @@
 .MuiDialog-root .MuiPaper-root {
   background: transparent !important;
 }
+
 .modal-content {
   background-color: #2c2c54;
-  border-radius: 8px;
   color: #ffffff;
   position: relative;
   padding: 20px;

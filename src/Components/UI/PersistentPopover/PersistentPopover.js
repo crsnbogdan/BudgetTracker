@@ -1,6 +1,7 @@
 import React from "react";
 import { Popover, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import styles from "./PersistentPopover.module.css";
 
 const PersistentPopover = ({ anchorEl, isOpen, onClose, children }) => {
   return (
@@ -19,18 +20,10 @@ const PersistentPopover = ({ anchorEl, isOpen, onClose, children }) => {
       disableRestoreFocus
     >
       <Box
-        sx={{ position: "relative", padding: 2, backgroundColor: "#2c2c54" }}
+        className={styles["popover-container"]}
         onClick={(e) => e.stopPropagation()}
       >
-        <CloseIcon
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            cursor: "pointer",
-          }}
-        />
+        <CloseIcon onClick={onClose} className={styles["close-button"]} />
         {children}
       </Box>
     </Popover>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import "./ModalContainer.css";
+import styles from "./ModalContainer.module.css";
 
 const ModalContainer = ({ children, isOpen, onClose }) => {
   return (
@@ -11,9 +11,9 @@ const ModalContainer = ({ children, isOpen, onClose }) => {
       maxWidth="lg"
       sx={{ backgroundColor: "transparent" }}
     >
-      <DialogContent className="modal-content">
+      <DialogContent className={styles["modal-content"]}>
         <IconButton
-          className="close-button"
+          className={styles["close-button"]}
           onClick={onClose}
           style={{ position: "absolute", top: 10, right: 10 }}
         >

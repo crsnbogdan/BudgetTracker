@@ -1,0 +1,32 @@
+.button {
+  background-color: #5a67d8 !important;
+  color: #ffffff;
+  border: none;
+  padding: 7px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #434190 !important;
+}
+
+.deleteButton {
+  background-color: #d35d6e !important;
+  color: #ffffff;
+}
+
+.deleteButton:hover {
+  background-color: #b4434a !important;
+}
+
+.submit-button,
+.add-category-button {
+  padding: 7px 14px;
+  font-size: 16px;
+}

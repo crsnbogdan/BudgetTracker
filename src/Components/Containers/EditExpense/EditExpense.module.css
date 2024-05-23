@@ -1,0 +1,36 @@
+.form-container {
+  background-color: #2c2c54;
+  width: 100%;
+  max-width: 300px;
+  color: #ffffff;
+  padding: 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.form-control {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button {
+  background-color: #5a67d8;
+  color: #ffffff;
+  border: none;
+  padding: 12px 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #434190;
+}

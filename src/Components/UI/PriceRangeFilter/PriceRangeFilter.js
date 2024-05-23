@@ -1,6 +1,7 @@
 import React from "react";
-import { TextField, Box, Typography } from "@mui/material";
-import "./PriceRangeFilter.css";
+import { Box } from "@mui/material";
+import Input from "../Input/Input";
+import styles from "./PriceRangeFilter.module.css";
 
 const PriceRangeFilter = ({
   minPrice,
@@ -9,46 +10,26 @@ const PriceRangeFilter = ({
   onMaxPriceChange,
 }) => {
   return (
-    <Box className="price-range-filter">
-      <Typography style={{ color: "#a3a3ff" }}>Price</Typography>
-      <TextField
+    <Box className={styles["price-range-filter"]}>
+      <Input
         type="number"
-        label={!minPrice && "Min"}
+        label="Min Price"
         value={minPrice}
         onChange={onMinPriceChange}
-        variant="outlined"
-        fullWidth
-        InputProps={{
+        inputProps={{
           style: {
             color: minPrice > maxPrice && maxPrice ? "#d35d6e" : "white",
-            backgroundColor: "#1e1e3a",
-            height: "40px",
-          },
-        }}
-        InputLabelProps={{
-          style: {
-            color: "#a3a3ff",
           },
         }}
       />
-      <TextField
+      <Input
         type="number"
-        sx={{ color: minPrice > maxPrice ? "red" : "white" }}
-        label={!maxPrice && "Max"}
+        label="Max Price"
         value={maxPrice}
         onChange={onMaxPriceChange}
-        variant="outlined"
-        fullWidth
-        InputProps={{
+        inputProps={{
           style: {
             color: minPrice > maxPrice && minPrice ? "#d35d6e" : "white",
-            backgroundColor: "#1e1e3a",
-            height: "40px",
-          },
-        }}
-        InputLabelProps={{
-          style: {
-            color: "#a3a3ff",
           },
         }}
       />

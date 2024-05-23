@@ -1,17 +1,17 @@
 import React, { useContext, useState } from "react";
-import { AppContext } from "../../Context/ContextProvider";
-import ModalContainer from "../UI/ModalContainer/ModalContainer";
+import { AppContext } from "../../../Context/ContextProvider";
+import ModalContainer from "../../UI/ModalContainer/ModalContainer";
 import AddExpense from "../AddExpense/AddExpense";
 import EditExpense from "../EditExpense/EditExpense";
 import EditBudget from "../EditBudget/EditBudget";
 import Filters from "../Filters/Filters";
-import Expense from "../UI/Expense/Expense";
-import PersistentPopover from "../UI/PersistentPopover/PersistentPopover";
+import Expense from "../../UI/Expense/Expense";
+import PersistentPopover from "../../UI/PersistentPopover/PersistentPopover";
 import dayjs from "dayjs";
-import { Box, Typography, styled, IconButton } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SortIcon from "@mui/icons-material/Sort";
-import "./ExpenseList.css";
+import styles from "./ExpenseList.module.css";
 
 const ExpenseList = () => {
   const {
@@ -106,7 +106,7 @@ const ExpenseList = () => {
   });
 
   return (
-    <Box className="total-expenses">
+    <Box className={styles["total-expenses"]}>
       {state.showExpenseModal && (
         <ModalContainer
           isOpen={state.showExpenseModal}
@@ -132,54 +132,70 @@ const ExpenseList = () => {
         </ModalContainer>
       )}
 
-      <Box className="table-header">
+      <Box className={styles["table-header"]}>
         <Typography
-          className="header-name table-field"
+          className={`${styles["header-name"]} ${styles["table-field"]}`}
           onClick={() => handleSort("name")}
           sx={{ cursor: "pointer" }}
         >
           Name
           <SortIcon
-            style={{ marginLeft: "5px", color: getSortIconColor("name") }}
+            className={
+              sortConfig.key === "name" && sortConfig.direction
+                ? styles.activeSortIcon
+                : ""
+            }
           />
         </Typography>
         <Typography
-          className="header-category table-field"
+          className={`${styles["header-category"]} ${styles["table-field"]}`}
           onClick={() => handleSort("category")}
           sx={{ cursor: "pointer" }}
         >
           Category
           <SortIcon
-            style={{ marginLeft: "5px", color: getSortIconColor("category") }}
+            className={
+              sortConfig.key === "category" && sortConfig.direction
+                ? styles.activeSortIcon
+                : ""
+            }
           />
         </Typography>
         <Typography
-          className="header-price table-field"
+          className={`${styles["header-price"]} ${styles["table-field"]}`}
           onClick={() => handleSort("price")}
           sx={{ cursor: "pointer" }}
         >
           Price
           <SortIcon
-            style={{ marginLeft: "5px", color: getSortIconColor("price") }}
+            className={
+              sortConfig.key === "price" && sortConfig.direction
+                ? styles.activeSortIcon
+                : ""
+            }
           />
         </Typography>
         <Typography
-          className="header-date table-field"
+          className={`${styles["header-date"]} ${styles["table-field"]}`}
           onClick={() => handleSort("date")}
           sx={{ cursor: "pointer" }}
         >
           Date
           <SortIcon
-            style={{ marginLeft: "5px", color: getSortIconColor("date") }}
+            className={
+              sortConfig.key === "date" && sortConfig.direction
+                ? styles.activeSortIcon
+                : ""
+            }
           />
         </Typography>
         <Box
-          className="right-section"
+          className={styles["right-section"]}
           onClick={toggleFilters}
-          sx={{ cursor: "pointer" }}
+          sx={{ cursor: "pointer", marginLeft: "auto" }}
         >
-          <Typography className="header-date table-field">Filter</Typography>
-          <IconButton style={{ color: "#ffffff", paddingRight: 0 }}>
+          <Typography className={styles["header-date"]}>Filter</Typography>
+          <IconButton style={{ color: "#ffffff" }}>
             <FilterListIcon />
           </IconButton>
           <PersistentPopover
@@ -194,7 +210,7 @@ const ExpenseList = () => {
           </PersistentPopover>
         </Box>
       </Box>
-      <Box className="expenses-list">
+      <Box className={styles["expenses-list"]}>
         {filteredExpenses.map((expense, index) => (
           <Expense
             key={index}
