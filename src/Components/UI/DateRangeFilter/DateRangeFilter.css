@@ -1,0 +1,57 @@
+.date-range-filter {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.date-range-filter .date-error input {
+  color: red !important;
+}
+
+.testclass input {
+  color: white !important;
+}
+
+.date-range-filter label {
+  margin-right: 10px;
+  font-size: 14px;
+  margin-bottom: 14px;
+  color: #a3a3ff !important;
+}
+
+.date-range-filter .MuiFormControl-root:last-of-type {
+  margin-bottom: 0;
+}
+
+.date-range-filter .MuiTextField-root {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.date-range-filter .MuiFormLabel-root {
+  margin-top: -7px;
+  color: white;
+}
+
+.date-range-filter .MuiFormControl-root {
+  width: 100%;
+}
+
+.date-range-filter .MuiOutlinedInput-root {
+  border-radius: 4px;
+  background-color: #1e1e3a;
+  color: #ffffff;
+  height: 40px;
+}
+
+.date-range-filter .MuiInputBase-input {
+  padding: 10px;
+}
+
+.date-range-filter .MuiOutlinedInput-notchedOutline {
+  border-color: #444 !important;
+}
+
+.date-range-filter .MuiSvgIcon-root {
+  color: #ffffff !important;
+}

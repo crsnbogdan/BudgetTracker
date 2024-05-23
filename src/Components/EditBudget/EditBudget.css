@@ -1,0 +1,139 @@
+.budget-container .MuiInputBase-input {
+  padding: 11px !important;
+}
+
+.budget-container .MuiFormLabel-root {
+  margin-top: -3px;
+  color: white !important;
+}
+
+.budget-container .category-percentage {
+  width: 60px !important;
+}
+
+.budget-container .budget-total {
+  margin-bottom: 0px !important;
+}
+.budget-container {
+  min-width: 500px;
+}
+
+.add-category-button,
+.submit-button {
+  background-color: #5a67d8;
+  color: #ffffff;
+  border: none;
+  padding: 7px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px !important;
+  align-items: center;
+}
+
+.form-row label {
+  margin-bottom: 0;
+}
+
+.add-category-button:hover,
+.submit-button:hover {
+  background-color: #434190;
+}
+
+.form-row:first-of-type > input {
+  width: 100%;
+}
+.form-row {
+  margin-bottom: 15px;
+}
+.form-row:last-of-type {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0 !important;
+}
+.form-row:nth-of-type(2) {
+  display: flex;
+  margin-bottom: 0;
+}
+
+.category-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.category-controls input[type="number"] {
+  width: 60px;
+}
+
+.control-button {
+  background-color: #d35d6e;
+  color: #ffffff;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #b4434a;
+}
+
+.category-circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.new-category-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.new-category-group label {
+  margin: 0;
+}
+
+.new-category-group input[type="text"] {
+  width: 150px;
+  margin-bottom: 0;
+}
+
+.new-category-group input[type="color"] {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  margin: 0;
+  border: 0px solid black;
+}
+
+.form-error {
+  color: #d35d6e;
+}

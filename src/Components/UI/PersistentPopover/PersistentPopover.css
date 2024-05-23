@@ -1,0 +1,9 @@
+.close-button {
+  color: #5a67d8;
+  transition: color 0.3s ease;
+  z-index: 1000;
+}
+
+.close-button:hover {
+  color: #434190;
+}

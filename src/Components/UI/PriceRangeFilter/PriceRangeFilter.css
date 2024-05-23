@@ -1,0 +1,39 @@
+.price-range-filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-range-filter .MuiFormControl-root:last-of-type {
+  margin-bottom: 0;
+}
+
+.price-range-filter label {
+  margin-right: 10px;
+  font-size: 14px;
+  margin-bottom: 14px;
+  color: white !important;
+}
+
+.price-range-filter .MuiTextField-root {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.price-range-filter .MuiFormLabel-root {
+  margin-top: -7px !important;
+  font-size: 16px !important;
+}
+
+.price-range-filter .MuiInputBase-input::placeholder {
+  color: white;
+}
+
+.price-range-filter .MuiOutlinedInput-root {
+  border-radius: 4px;
+  background-color: #1e1e3a;
+  color: #ffffff;
+}
+
+.price-range-filter .MuiOutlinedInput-notchedOutline {
+  border-color: #444 !important;
+}
