@@ -39,7 +39,7 @@ const EditExpense = () => {
         name,
         price: Number(price),
         category,
-        date: expenseDate.format("YYYY-MM-DD"),
+        date: expenseDate.format("DD-MM-YYYY"),
       },
     });
     showEditExpenseModal(false);

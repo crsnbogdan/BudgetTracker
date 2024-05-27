@@ -4,6 +4,7 @@ import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Typography } from "@mui/material";
+import { v4 as uuidv4 } from "uuid"; // Using uuid for unique IDs
 import styles from "./EditBudget.module.css";
 
 const EditBudget = () => {
@@ -16,9 +17,10 @@ const EditBudget = () => {
 
   useEffect(() => {
     const initialCategories = { ...categories };
-    Object.keys(initialCategories).forEach((category) => {
-      const percentage = Number(initialCategories[category].budget);
-      initialCategories[category].amount = formatValue(
+    Object.keys(initialCategories).forEach((categoryId) => {
+      const category = initialCategories[categoryId];
+      const percentage = Number(category.budget);
+      initialCategories[categoryId].amount = formatValue(
         (totalBudget * percentage) / 100
       );
     });
@@ -31,13 +33,13 @@ const EditBudget = () => {
     updateCategoryBudgets(tempCategories, newTotalBudget);
   };
 
-  const handleBudgetAmountChange = (categoryName, value) => {
+  const handleBudgetAmountChange = (categoryId, value) => {
     const formattedValue = formatValue(Number(value));
     setTempCategories((prevCategories) => {
       const newCategories = {
         ...prevCategories,
-        [categoryName]: {
-          ...prevCategories[categoryName],
+        [categoryId]: {
+          ...prevCategories[categoryId],
           amount: formattedValue,
           budget: formatValue((formattedValue / totalBudget) * 100),
         },
@@ -46,13 +48,13 @@ const EditBudget = () => {
     });
   };
 
-  const handlePercentageChange = (categoryName, value) => {
+  const handlePercentageChange = (categoryId, value) => {
     const formattedValue = formatValue(Number(value));
     setTempCategories((prevCategories) => {
       const newCategories = {
         ...prevCategories,
-        [categoryName]: {
-          ...prevCategories[categoryName],
+        [categoryId]: {
+          ...prevCategories[categoryId],
           budget: formattedValue,
           amount: formatValue((totalBudget * formattedValue) / 100),
         },
@@ -63,9 +65,10 @@ const EditBudget = () => {
 
   const updateCategoryBudgets = (categories, totalBudget) => {
     const updatedCategories = { ...categories };
-    Object.keys(updatedCategories).forEach((category) => {
-      const percentage = Number(updatedCategories[category].budget);
-      updatedCategories[category].amount = formatValue(
+    Object.keys(updatedCategories).forEach((categoryId) => {
+      const category = updatedCategories[categoryId];
+      const percentage = Number(category.budget);
+      updatedCategories[categoryId].amount = formatValue(
         (totalBudget * percentage) / 100
       );
     });
@@ -74,9 +77,11 @@ const EditBudget = () => {
 
   const handleAddCategory = () => {
     if (newCategoryName && newCategoryColor) {
+      const newCategoryId = uuidv4();
       dispatch({
         type: "addCategory",
         payload: {
+          id: newCategoryId,
           color: newCategoryColor,
           name: newCategoryName,
           budget: 0,
@@ -88,11 +93,11 @@ const EditBudget = () => {
     }
   };
 
-  const handleRemoveCategory = (categoryName) => {
+  const handleRemoveCategory = (categoryId) => {
     dispatch({
       type: "removeCategory",
       payload: {
-        name: categoryName,
+        id: categoryId,
       },
     });
   };
@@ -184,41 +189,44 @@ const EditBudget = () => {
         Categories
       </Typography>
       <Box className={styles["categories-wrapper"]}>
-        {Object.values(tempCategories).map((category, index) => (
-          <Box key={index} className={styles["category-group"]}>
-            <Box className={styles["category-info"]}>
-              <Box
-                className={styles["category-circle"]}
-                style={{ backgroundColor: category.color }}
-              />
-              <Typography>{category.name}</Typography>
+        {Object.keys(tempCategories).map((categoryId) => {
+          const category = tempCategories[categoryId];
+          return (
+            <Box key={categoryId} className={styles["category-group"]}>
+              <Box className={styles["category-info"]}>
+                <Box
+                  className={styles["category-circle"]}
+                  style={{ backgroundColor: category.color }}
+                />
+                <Typography>{category.name}</Typography>
+              </Box>
+              <Box className={styles["category-controls"]}>
+                <Input
+                  label="Amount"
+                  type="number"
+                  value={category.amount || ""}
+                  onChange={(e) =>
+                    handleBudgetAmountChange(categoryId, e.target.value)
+                  }
+                />
+                <Input
+                  label="Percentage"
+                  type="number"
+                  value={category.budget || ""}
+                  onChange={(e) =>
+                    handlePercentageChange(categoryId, e.target.value)
+                  }
+                />
+                <Button
+                  onClick={() => handleRemoveCategory(categoryId)}
+                  className={styles["delete-button"]}
+                  isDelete
+                  icon={<DeleteIcon />}
+                />
+              </Box>
             </Box>
-            <Box className={styles["category-controls"]}>
-              <Input
-                label="Amount"
-                type="number"
-                value={category.amount || ""}
-                onChange={(e) =>
-                  handleBudgetAmountChange(category.name, e.target.value)
-                }
-              />
-              <Input
-                label="Percentage"
-                type="number"
-                value={category.budget || ""}
-                onChange={(e) =>
-                  handlePercentageChange(category.name, e.target.value)
-                }
-              />
-              <Button
-                onClick={() => handleRemoveCategory(category.name)}
-                className={styles["delete-button"]}
-                isDelete
-                icon={<DeleteIcon />}
-              />
-            </Box>
-          </Box>
-        ))}
+          );
+        })}
       </Box>
       {totalPercentageUsage > 100 && (
         <Typography className={styles["form-error"]}>

@@ -22,6 +22,7 @@
   border: none !important;
 }
 
-.MuiSvgIcon-root {
+.input-text .MuiSvgIcon-root,
+.MuiInputBase-root .MuiSvgIcon-root {
   color: #ffffff !important;
 }

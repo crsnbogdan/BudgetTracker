@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
 import ModalContainer from "../../UI/ModalContainer/ModalContainer";
 import AddExpense from "../AddExpense/AddExpense";
@@ -13,7 +13,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import SortIcon from "@mui/icons-material/Sort";
 import styles from "./ExpenseList.module.css";
 
-const ExpenseList = () => {
+const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   const {
     state,
     dispatch,
@@ -26,6 +26,7 @@ const ExpenseList = () => {
   const [filtersVisible, setFiltersVisible] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+  const [selectedExpenses, setSelectedExpenses] = useState([]);
 
   const toggleFilters = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,6 +105,20 @@ const ExpenseList = () => {
 
     return matchesCategory && matchesDateRange && matchesPriceRange;
   });
+
+  const handleSelectExpense = (expense) => {
+    setSelectedExpenses((prevSelected) => {
+      if (prevSelected.includes(expense)) {
+        return prevSelected.filter((exp) => exp !== expense);
+      } else {
+        return [...prevSelected, expense];
+      }
+    });
+  };
+
+  useEffect(() => {
+    onSelectExpenses(selectedExpenses);
+  }, [selectedExpenses, onSelectExpenses]);
 
   return (
     <Box className={styles["total-expenses"]}>
@@ -211,9 +226,10 @@ const ExpenseList = () => {
         </Box>
       </Box>
       <Box className={styles["expenses-list"]}>
-        {filteredExpenses.map((expense, index) => (
+        {filteredExpenses.map((expense) => (
           <Expense
-            key={index}
+            key={expense.id}
+            id={expense.id}
             name={expense.name}
             price={expense.price}
             category={expense.category}
@@ -221,6 +237,9 @@ const ExpenseList = () => {
             categories={state.categories}
             onEdit={() => handleEdit(expense)}
             onRemove={() => handleRemove(expense)}
+            onSelect={() => handleSelectExpense(expense)}
+            isSelected={selectedExpenses.includes(expense)}
+            multiSelectMode={multiSelectMode}
           />
         ))}
       </Box>

@@ -26,7 +26,7 @@ const CategoryDropdown = ({ categories, category, onChange, multiple }) => {
         label="Category"
         renderValue={(selected) =>
           multiple
-            ? selected.join(", ")
+            ? selected.map((catId) => categories[catId]?.name).join(", ")
             : categories[selected]?.name || "Select a category"
         }
         className={styles.outlinedInputRoot}
@@ -42,25 +42,25 @@ const CategoryDropdown = ({ categories, category, onChange, multiple }) => {
           },
         }}
       >
-        {Object.keys(categories).map((cat) => (
-          <MenuItem key={cat} value={cat}>
+        {Object.keys(categories).map((catId) => (
+          <MenuItem key={catId} value={catId}>
             {multiple ? (
               <>
                 <Checkbox
-                  checked={category.includes(cat)}
-                  style={{ color: categories[cat].color }}
+                  checked={category.includes(catId)}
+                  style={{ color: categories[catId].color }}
                 />
-                <ListItemText primary={cat} />
+                <ListItemText primary={categories[catId].name} />
               </>
             ) : (
               <FormControlLabel
                 control={
                   <Radio
-                    checked={category === cat}
-                    style={{ color: categories[cat].color }}
+                    checked={category === catId}
+                    style={{ color: categories[catId].color }}
                   />
                 }
-                label={cat}
+                label={categories[catId].name}
               />
             )}
           </MenuItem>

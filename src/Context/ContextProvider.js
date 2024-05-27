@@ -1,178 +1,191 @@
 import React, { createContext, useReducer } from "react";
+import uniqid from "uniquid";
 
 const initialExpenses = [
   {
-    id: 1,
+    id: uniqid(),
     name: "Grocery Shopping",
     price: 50.75,
-    category: "Food & Dining",
+    category: "1",
     date: "2024-05-10",
   },
   {
-    id: 2,
+    id: uniqid(),
     name: "Electric Bill",
     price: 75.0,
-    category: "Utilities",
+    category: "2",
     date: "2024-05-08",
   },
   {
-    id: 3,
+    id: uniqid(),
     name: "Doctor Visit",
     price: 120.0,
-    category: "Healthcare",
+    category: "3",
     date: "2024-05-05",
   },
   {
-    id: 4,
+    id: uniqid(),
     name: "Gas",
     price: 40.0,
-    category: "Transportation",
+    category: "4",
     date: "2024-05-12",
   },
   {
-    id: 5,
+    id: uniqid(),
     name: "Rent",
     price: 1000.0,
-    category: "Housing & Rent",
+    category: "5",
     date: "2024-05-01",
   },
   {
-    id: 6,
+    id: uniqid(),
     name: "Netflix Subscription",
     price: 15.99,
-    category: "Entertainment",
+    category: "6",
     date: "2024-05-09",
   },
   {
-    id: 7,
+    id: uniqid(),
     name: "Investment Deposit",
     price: 200.0,
-    category: "Savings & Investments",
+    category: "7",
     date: "2024-05-06",
   },
   {
-    id: 8,
+    id: uniqid(),
     name: "Restaurant Dinner",
     price: 80.0,
-    category: "Food & Dining",
+    category: "1",
     date: "2024-05-11",
   },
   {
-    id: 9,
+    id: uniqid(),
     name: "Water Bill",
     price: 30.0,
-    category: "Utilities",
+    category: "2",
     date: "2024-05-07",
   },
   {
-    id: 10,
+    id: uniqid(),
     name: "Bus Pass",
     price: 25.0,
-    category: "Transportation",
+    category: "4",
     date: "2024-05-04",
   },
   {
-    id: 11,
+    id: uniqid(),
     name: "Gym Membership",
     price: 45.0,
-    category: "Healthcare",
+    category: "3",
     date: "2024-05-03",
   },
   {
-    id: 12,
+    id: uniqid(),
     name: "Savings Deposit",
     price: 150.0,
-    category: "Savings & Investments",
+    category: "7",
     date: "2024-05-10",
   },
   {
-    id: 13,
+    id: uniqid(),
     name: "Movie Tickets",
     price: 20.0,
-    category: "Entertainment",
+    category: "6",
     date: "2024-05-13",
   },
   {
-    id: 14,
+    id: uniqid(),
     name: "Car Maintenance",
     price: 300.0,
-    category: "Transportation",
+    category: "4",
     date: "2024-05-14",
   },
   {
-    id: 15,
+    id: uniqid(),
     name: "Miscellaneous Shopping",
     price: 60.0,
-    category: "Miscellaneous",
+    category: "8",
     date: "2024-05-02",
   },
 ];
 
-const getCategoryTotal = (expenses, category) => {
-  return expenses
-    .filter((expense) => expense.category === category)
-    .reduce((total, expense) => total + expense.price, 0);
-};
-
 const initialCategories = {
-  "Food & Dining": {
+  1: {
+    id: 1,
     color: "#4DD0E1",
     budget: "20",
     name: "Food & Dining",
   },
-  Utilities: {
+  2: {
+    id: 2,
     color: "#64B5F6",
     budget: "10",
     name: "Utilities",
   },
-  Healthcare: {
+  3: {
+    id: 3,
     color: "#81C784",
     budget: "10",
     name: "Healthcare",
   },
-  Transportation: {
+  4: {
+    id: 4,
     color: "#BA68C8",
     budget: "10",
     name: "Transportation",
   },
-  "Housing & Rent": {
+  5: {
+    id: 5,
     color: "#FFD700",
     budget: "25",
     name: "Housing & Rent",
   },
-  Entertainment: {
+  6: {
+    id: 6,
     color: "#FF69B4",
     budget: "5",
     name: "Entertainment",
   },
-  "Savings & Investments": {
+  7: {
+    id: 7,
     color: "#8A2BE2",
     budget: "10",
     name: "Savings & Investments",
   },
-  Miscellaneous: {
+  8: {
+    id: 8,
     color: "#FF6347",
     budget: "5",
     name: "Miscellaneous",
   },
 };
 
-Object.keys(initialCategories).forEach((category) => {
-  initialCategories[category].used = getCategoryTotal(
-    initialExpenses,
-    category
-  );
+const getCategoryTotal = (expenses, categoryId) => {
+  return expenses
+    .filter((expense) => expense.category === categoryId)
+    .reduce((total, expense) => total + expense.price, 0);
+};
+
+const calculateCategoriesUsage = (categories, expenses) => {
+  const updatedCategories = { ...categories };
+  Object.keys(updatedCategories).forEach((key) => {
+    updatedCategories[key].used = getCategoryTotal(expenses, key);
+  });
+  return updatedCategories;
+};
+
+Object.keys(initialCategories).forEach((key) => {
+  initialCategories[key].used = getCategoryTotal(initialExpenses, key);
 });
 
 const initialState = {
   expenses: initialExpenses,
   totalBudget: 5000,
-  usedBudget: 0,
+  categories: calculateCategoriesUsage(initialCategories, initialExpenses),
   showExpenseModal: false,
   showBudgetModal: false,
   showEditExpenseModal: false,
   selectedExpense: {},
-  categories: initialCategories,
   filters: {
     categories: [],
     dateRange: { startDate: null, endDate: null },
@@ -183,15 +196,15 @@ const initialState = {
 const calculateUsedBudget = (state) => {
   const updatedCategories = { ...state.categories };
 
-  for (const category in updatedCategories) {
-    updatedCategories[category].used = 0;
+  for (const key in updatedCategories) {
+    updatedCategories[key].used = 0;
   }
 
-  Object.keys(updatedCategories).forEach((category) => {
+  Object.keys(updatedCategories).forEach((key) => {
     const totalUsed = state.expenses
-      .filter((expense) => expense.category === category)
+      .filter((expense) => expense.category === key)
       .reduce((total, expense) => total + expense.price, 0);
-    updatedCategories[category].used = totalUsed;
+    updatedCategories[key].used = totalUsed;
   });
 
   return updatedCategories;
@@ -201,9 +214,10 @@ const AppReducer = (state, action) => {
   let updatedState;
   switch (action.type) {
     case "addExpense":
+      const newExpense = { ...action.payload, id: uniqid() };
       updatedState = {
         ...state,
-        expenses: [...state.expenses, action.payload],
+        expenses: [...state.expenses, newExpense],
       };
       break;
     case "removeExpense":
@@ -211,6 +225,14 @@ const AppReducer = (state, action) => {
         ...state,
         expenses: state.expenses.filter(
           (expense) => expense.id !== action.payload.id
+        ),
+      };
+      break;
+    case "removeMultipleExpenses":
+      updatedState = {
+        ...state,
+        expenses: state.expenses.filter(
+          (expense) => !action.payload.ids.includes(expense.id)
         ),
       };
       break;
@@ -283,19 +305,21 @@ const AppReducer = (state, action) => {
       };
       break;
     case "addCategory":
+      const newCategoryId = uniqid();
       updatedState = {
         ...state,
         categories: {
           ...state.categories,
-          [action.payload.name]: {
+          [newCategoryId]: {
             ...action.payload,
+            id: newCategoryId,
             used: 0,
           },
         },
       };
       break;
     case "removeCategory":
-      const { [action.payload.name]: _, ...remainingCategories } =
+      const { [action.payload.id]: _, ...remainingCategories } =
         state.categories;
       updatedState = {
         ...state,
@@ -309,7 +333,10 @@ const AppReducer = (state, action) => {
 
   return {
     ...updatedState,
-    categories: calculateUsedBudget(updatedState),
+    categories: calculateCategoriesUsage(
+      updatedState.categories,
+      updatedState.expenses
+    ),
   };
 };
 
@@ -350,6 +377,10 @@ export const AppProvider = ({ children }) => {
     dispatch({ type: "updateFilters", payload: filters });
   };
 
+  const removeMultipleExpenses = (ids) => {
+    dispatch({ type: "removeMultipleExpenses", payload: { ids } });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -362,6 +393,7 @@ export const AppProvider = ({ children }) => {
         setSelectedExpense,
         updateFilters,
         selectedExpense: state.selectedExpense,
+        removeMultipleExpenses,
       }}
     >
       {children}

@@ -12,7 +12,7 @@
 .outlinedInputRoot {
   background-color: #1e1e3a;
   color: #ffffff !important;
-  height: 48px; /* Ensure uniform height for all inputs */
+  height: 48px;
   border: 1px solid #444;
 }
 

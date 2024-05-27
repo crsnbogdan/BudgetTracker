@@ -6,8 +6,8 @@ const BudgetGraphs = () => {
   const { state } = useContext(AppContext);
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
-  const getCategoryBudgetInfo = (category) => {
-    const categoryInfo = state.categories[category];
+  const getCategoryBudgetInfo = (categoryId) => {
+    const categoryInfo = state.categories[categoryId];
     const totalCategoryBudget =
       (parseFloat(categoryInfo.budget) / 100) * state.totalBudget;
     const remainingCategoryBudget = totalCategoryBudget - categoryInfo.used;
@@ -19,8 +19,8 @@ const BudgetGraphs = () => {
     };
   };
 
-  const handleMouseEnter = (category) => {
-    setHoveredCategory(category);
+  const handleMouseEnter = (categoryId) => {
+    setHoveredCategory(categoryId);
   };
 
   const handleMouseLeave = () => {
@@ -30,19 +30,19 @@ const BudgetGraphs = () => {
   return (
     <div className="budget-tracker">
       <div className={`budget-overview ${hoveredCategory ? "highlight" : ""}`}>
-        {Object.keys(state.categories).map((category) => {
-          const { total, used, remaining } = getCategoryBudgetInfo(category);
+        {Object.keys(state.categories).map((categoryId) => {
+          const { total, used, remaining } = getCategoryBudgetInfo(categoryId);
           const usedPercentage = (used / total) * 100;
           const remainingPercentage = 100 - usedPercentage;
           const isOverBudget = used > total;
 
           return (
             <div
-              key={category}
+              key={categoryId}
               className={`budget-category ${
-                hoveredCategory === category ? "hovered" : ""
+                hoveredCategory === categoryId ? "hovered" : ""
               }`}
-              onMouseEnter={() => handleMouseEnter(category)}
+              onMouseEnter={() => handleMouseEnter(categoryId)}
               onMouseLeave={handleMouseLeave}
             >
               <div className="budget-bar">
@@ -52,7 +52,7 @@ const BudgetGraphs = () => {
                     height: `${usedPercentage}%`,
                     backgroundColor: isOverBudget
                       ? "#d35d6e"
-                      : state.categories[category].color,
+                      : state.categories[categoryId].color,
                   }}
                 />
                 {remainingPercentage > 0 && !isOverBudget && (
@@ -68,9 +68,9 @@ const BudgetGraphs = () => {
                 className="category-label"
                 style={{ color: isOverBudget ? "#d35d6e" : "#b5b5b5" }}
               >
-                {category}
+                {state.categories[categoryId].name}
               </span>
-              {hoveredCategory === category && (
+              {hoveredCategory === categoryId && (
                 <div className="tooltip">
                   <p>Total Budget: ${total.toFixed(2)}</p>
                   <p>Used: ${used.toFixed(2)}</p>
