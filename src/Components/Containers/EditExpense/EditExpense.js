@@ -14,23 +14,28 @@ const EditExpense = () => {
   const [price, setPrice] = useState(selectedExpense?.price?.toString() || "");
   const [name, setName] = useState(selectedExpense?.name || "");
   const [date, setDate] = useState(
-    selectedExpense?.date ? dayjs(selectedExpense.date) : dayjs()
+    selectedExpense?.date ? dayjs(selectedExpense.date, "DD-MM-YYYY") : dayjs()
   );
 
   useEffect(() => {
     setCategory(selectedExpense?.category || "");
     setPrice(selectedExpense?.price?.toString() || "");
     setName(selectedExpense?.name || "");
-    setDate(selectedExpense?.date ? dayjs(selectedExpense.date) : dayjs());
+    setDate(
+      selectedExpense?.date
+        ? dayjs(selectedExpense.date, "DD-MM-YYYY")
+        : dayjs()
+    );
   }, [selectedExpense]);
 
   const handleCategoryChange = (event) => setCategory(event.target.value);
   const handlePriceChange = (event) => setPrice(event.target.value);
   const handleNameChange = (event) => setName(event.target.value);
-  const handleDateChange = (newDate) => setDate(newDate);
+  const handleDateChange = (newDate) => {
+    setDate(dayjs(newDate, "DD-MM-YYYY"));
+  };
 
   const handleSave = () => {
-    const expenseDate = date || dayjs();
     if (!name || !category || !price) return;
     dispatch({
       type: "updateExpense",
@@ -39,22 +44,22 @@ const EditExpense = () => {
         name,
         price: Number(price),
         category,
-        date: expenseDate.format("DD-MM-YYYY"),
+        date: date.format("DD-MM-YYYY"),
       },
     });
     showEditExpenseModal(false);
   };
 
   return (
-    <div className={styles["form-container"]}>
-      <div className={styles["form-row"]}>
+    <div className={styles.formContainer}>
+      <div className={styles.formRow}>
         <CategoryDropdown
           category={category}
           onChange={handleCategoryChange}
           categories={categories}
         />
       </div>
-      <div className={styles["form-row"]}>
+      <div className={styles.formRow}>
         <Input
           label="Price"
           type="number"
@@ -62,7 +67,7 @@ const EditExpense = () => {
           onChange={handlePriceChange}
         />
       </div>
-      <div className={styles["form-row"]}>
+      <div className={styles.formRow}>
         <Input
           label="Name"
           type="text"
@@ -70,15 +75,15 @@ const EditExpense = () => {
           onChange={handleNameChange}
         />
       </div>
-      <div className={styles["form-row"]}>
+      <div className={styles.formRow}>
         <Input
           label="Date"
           type="date"
-          value={date}
+          value={date.format("DD-MM-YYYY")}
           onChange={handleDateChange}
         />
       </div>
-      <div className={styles["form-control"]}>
+      <div className={styles.formControl}>
         <Button onClick={handleSave} className={styles.button}>
           Save
         </Button>

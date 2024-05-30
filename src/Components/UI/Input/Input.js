@@ -10,13 +10,13 @@ const Input = ({ label, value, onChange, type }) => {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          className="input-date"
+          className="inputDate"
           label={label}
-          views={["month", "day", "year"]}
-          inputFormat="MM/DD/YYYY"
-          value={value ? dayjs(value) : null}
+          views={["year", "month", "day"]}
+          format="DD-MM-YYYY"
+          value={value ? dayjs(value, "DD-MM-YYYY") : null}
           onChange={(newValue) =>
-            onChange(newValue ? newValue.format("YYYY-MM-DD") : null)
+            onChange(newValue ? newValue.format("DD-MM-YYYY") : null)
           }
           renderInput={(params) => (
             <TextField
@@ -29,6 +29,7 @@ const Input = ({ label, value, onChange, type }) => {
               InputLabelProps={{
                 ...params.InputLabelProps,
               }}
+              className="inputText"
             />
           )}
         />
@@ -37,7 +38,7 @@ const Input = ({ label, value, onChange, type }) => {
   } else {
     return (
       <TextField
-        className="input-text"
+        className="inputText"
         label={label}
         type={type}
         value={value}

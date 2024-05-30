@@ -20,10 +20,10 @@ const PersistentPopover = ({ anchorEl, isOpen, onClose, children }) => {
       disableRestoreFocus
     >
       <Box
-        className={styles["popover-container"]}
+        className={styles.popoverContainer}
         onClick={(e) => e.stopPropagation()}
       >
-        <CloseIcon onClick={onClose} className={styles["close-button"]} />
+        <CloseIcon onClick={onClose} className={styles.closeButton} />
         {children}
       </Box>
     </Popover>

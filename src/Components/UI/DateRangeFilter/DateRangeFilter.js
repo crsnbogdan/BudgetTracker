@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
+import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import Input from "../Input/Input";
 import styles from "./DateRangeFilter.module.css";
 
@@ -13,18 +13,14 @@ const DateRangeFilter = ({
   predefinedRanges,
 }) => {
   return (
-    <Box className={styles["date-range-filter"]}>
-      <FormControl
-        fullWidth
-        variant="outlined"
-        className={styles["formControl"]}
-      >
-        <InputLabel className={styles["inputLabel"]}>Date Range</InputLabel>
+    <div className={styles.dateRangeFilter}>
+      <FormControl fullWidth variant="outlined" className={styles.formControl}>
+        <InputLabel className={styles.inputLabel}>Date Range</InputLabel>
         <Select
           value={selectedRange}
           onChange={(e) => onRangeChange(e.target.value)}
           label="Date Range"
-          className={styles["outlinedInputRoot"]}
+          className={styles.outlinedInputRoot}
           MenuProps={{
             PaperProps: {
               style: {
@@ -57,7 +53,7 @@ const DateRangeFilter = ({
           />
         </>
       )}
-    </Box>
+    </div>
   );
 };
 

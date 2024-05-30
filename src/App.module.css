@@ -1,0 +1,155 @@
+@import "./variables.css";
+
+.app {
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--background-color-app);
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+body::-webkit-scrollbar {
+  height: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #1e1e3a;
+  border-radius: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #5a67d8;
+  border-radius: 8px;
+  border: 2px solid #2c2c54;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #434190;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  color: var(--color-text);
+  background-color: var(--background-color-header);
+  padding: 10px;
+  box-shadow: var(--box-shadow);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 20px;
+  gap: 10px;
+}
+
+.topSection {
+  display: grid;
+  grid-template-columns: 49.5% 49.5%;
+  height: 50%;
+  gap: 1%;
+}
+
+.recurringExpenses,
+.budgetTracking {
+  background-color: var(--background-color-section);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: var(--box-shadow);
+  height: 100%;
+  max-width: 100%;
+}
+
+.controlSection {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.controlSectionContained {
+  display: flex;
+  gap: 10px;
+}
+
+.removebtnMultiple {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size);
+  margin-left: 8px;
+  transition: background-color 0.3s ease;
+  color: var(--color-text);
+  background-color: var(--color-button-remove);
+}
+
+.removebtnMultiple:hover {
+  background-color: var(--color-button-remove-hover);
+}
+
+.selectMultipleButton {
+  color: var(--color-text);
+  background-color: var(--color-button-select-multiple);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-right: auto;
+}
+
+.selectMultipleButton:hover {
+  background-color: var(--color-button-select-multiple-hover);
+}
+
+.editBudgetButton,
+.addExpenseButton {
+  background-color: var(--color-button-select-multiple);
+  color: var(--color-text);
+  border: none;
+  padding: 8px 16px;
+  font-size: var(--font-size);
+  cursor: pointer;
+}
+
+.editBudgetButton:hover,
+.addExpenseButton:hover {
+  background-color: var(--color-button-select-multiple-hover);
+}
+
+.visualizationSelect {
+  position: absolute !important;
+  top: 15px;
+  z-index: 100;
+  right: 10px;
+  width: auto;
+  background-color: none;
+  color: var(--color-text);
+}
+
+.visualizationSelect .MuiOutlinedInput-root {
+  background-color: var(--background-color-select);
+  color: var(--color-text) !important;
+  border: 1px solid var(--border-color);
+}
+
+.visualizationSelect .MuiSvgIcon-root {
+  color: var(--color-text) !important;
+}
+
+.visualizationSelect .MuiMenuItem-root {
+  background-color: var(--background-color-select);
+  color: var(--color-text);
+}
+
+.visualizationSelect .MuiMenuItem-root:hover {
+  background-color: var(--background-color-select-hover);
+}
+
+.visualizationSelect .MuiInputLabel-root {
+  color: var(--color-text) !important;
+}
+
+.visualizationSelect .MuiInputBase-input {
+  color: var(--color-text) !important;
+}

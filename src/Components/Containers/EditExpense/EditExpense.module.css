@@ -1,25 +1,25 @@
-.form-container {
-  background-color: #2c2c54;
-  width: 100%;
-  max-width: 300px;
-  color: #ffffff;
+@import "../../../variables.css";
+
+.formContainer {
+  background-color: var(--background-color-section);
+  color: var(--color-text);
   padding: 20px;
 }
 
-.form-row {
+.formRow {
   display: flex;
   flex-direction: column;
   margin-bottom: 14px;
 }
 
-.form-control {
+.formControl {
   display: flex;
   justify-content: flex-end;
 }
 
 .button {
-  background-color: #5a67d8;
-  color: #ffffff;
+  background-color: var(--color-button-select-multiple);
+  color: var(--color-text);
   border: none;
   padding: 12px 18px;
   text-align: center;
@@ -32,5 +32,5 @@
 }
 
 .button:hover {
-  background-color: #434190;
+  background-color: var(--color-button-select-multiple-hover);
 }

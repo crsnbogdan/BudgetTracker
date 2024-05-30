@@ -1,0 +1,61 @@
+@import "../../../variables.css";
+
+.categoryFilter .MuiInputLabel-root {
+  color: var(--color-text);
+  font-size: 16px !important;
+}
+
+.categoryFilter .MuiFormLabel-root {
+  color: var(--color-text) !important;
+}
+
+.categoryFilter .MuiOutlinedInput-root {
+  background-color: var(--background-color-select);
+  color: var(--color-text);
+}
+
+.categoryFilter .MuiSvgIcon-root {
+  color: var(--color-text) !important;
+}
+
+.categoryFilter .MuiMenuItem-root {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: var(--color-text);
+}
+
+.categoryFilter .MuiMenuItem-root:hover {
+  background-color: var(--background-color-select-hover);
+}
+
+.categoryFilter .categoryCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.categoryFilter .MuiOutlinedInput-input {
+  display: flex;
+  align-items: center;
+}
+
+.categoryFilter .MuiSelect-select {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.selectedCategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.selectedCategory {
+  display: flex;
+  align-items: center;
+  background-color: var(--background-color-section);
+  padding: 2px 6px;
+}

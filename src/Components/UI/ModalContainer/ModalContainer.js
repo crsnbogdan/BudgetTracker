@@ -11,9 +11,9 @@ const ModalContainer = ({ children, isOpen, onClose }) => {
       maxWidth="lg"
       sx={{ backgroundColor: "transparent" }}
     >
-      <DialogContent className={styles["modal-content"]}>
+      <DialogContent className={styles.modalContent}>
         <IconButton
-          className={styles["close-button"]}
+          className={styles.closeButton}
           onClick={onClose}
           style={{ position: "absolute", top: 10, right: 10 }}
         >

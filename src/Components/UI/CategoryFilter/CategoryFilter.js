@@ -1,7 +1,6 @@
 import React from "react";
 import CategoryDropdown from "../CategoryDropdown/CategoryDropdown";
-import "./CategoryFilter.css";
-import { Typography } from "@mui/material";
+import styles from "./CategoryFilter.module.css";
 
 const CategoryFilter = ({
   selectedCategories,
@@ -9,7 +8,7 @@ const CategoryFilter = ({
   categories,
 }) => {
   return (
-    <div className="category-filter">
+    <div className={styles.categoryFilter}>
       <CategoryDropdown
         category={selectedCategories}
         categories={categories}

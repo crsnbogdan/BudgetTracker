@@ -11,14 +11,20 @@ import {
 } from "@mui/material";
 import styles from "./CategoryDropdown.module.css";
 
-const CategoryDropdown = ({ categories, category, onChange, multiple }) => {
+const CategoryDropdown = ({
+  label = "Category",
+  categories,
+  category,
+  onChange,
+  multiple,
+}) => {
   return (
     <FormControl
       fullWidth
       variant="outlined"
       className={styles.categoryDropdown}
     >
-      <InputLabel className={styles.formLabel}>Category</InputLabel>
+      <InputLabel className={styles.formLabel}>{label}</InputLabel>
       <Select
         multiple={multiple}
         value={category}

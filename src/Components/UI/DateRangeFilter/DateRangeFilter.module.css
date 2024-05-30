@@ -1,4 +1,6 @@
-.date-range-filter {
+@import "../../../variables.css";
+
+.dateRangeFilter {
   display: flex;
   flex-direction: column;
   margin-bottom: 14px;
@@ -9,41 +11,39 @@
 }
 
 .inputLabel {
-  color: white !important;
+  color: var(--color-text) !important;
   font-size: 16px !important;
-  margin-top: 3px !important;
 }
 
 .outlinedInputRoot {
-  background-color: #1e1e3a;
-  color: #ffffff !important;
+  background-color: transparent;
+  color: var(--color-text) !important;
   height: 48px;
-  border: 1px solid #444;
 }
 
 .MuiSvgIcon-root {
-  color: #ffffff !important;
+  color: var(--color-text) !important;
 }
 
 .MuiMenuItem-root {
   display: flex;
   align-items: center;
   padding: 10px;
-  color: #ffffff;
+  color: var(--color-text);
 }
 
 .MuiMenuItem-root:hover {
-  background-color: #333366;
+  background-color: var(--background-color-select-hover);
 }
 
 .MuiFormControl-root:last-of-type {
   margin-bottom: 0;
 }
 
-.date-range-filter .MuiInputBase-input::placeholder {
-  color: white;
+.dateRangeFilter .MuiInputBase-input::placeholder {
+  color: var(--color-text);
 }
 
-.date-range-filter .MuiOutlinedInput-notchedOutline {
-  border-color: #444 !important;
+.dateRangeFilter .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color) !important;
 }

@@ -1,6 +1,6 @@
 @import "../../../variables.css";
 
-.addExpenseForm {
+.addRecurringExpenseForm {
   background-color: var(--background-color-section);
   color: var(--color-text);
   padding: 20px 15px 10px;

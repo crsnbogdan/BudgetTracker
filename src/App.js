@@ -1,17 +1,17 @@
-import React, { useContext, useState } from "react";
-import "./App.css";
+import React, { useContext, useState, useEffect } from "react";
+import styles from "./App.module.css";
 import { AppContext } from "./Context/ContextProvider";
 import ExpenseList from "./Components/Containers/ExpenseList/ExpenseList";
 import BudgetGraphs from "./Components/Containers/BudgetGraphs/BudgetGraphs";
 import BudgetChart from "./Components/Containers/BudgetChart/BudgetChart";
+import RecurringExpenseList from "./Components/Containers/RecurringExpenseList/RecurringExpenseList";
 import Button from "./Components/UI/Button/Button";
 import {
-  Box,
-  Typography,
   Select,
   MenuItem,
   FormControl,
-  InputLabel,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -30,6 +30,17 @@ function App() {
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [selectedExpenses, setSelectedExpenses] = useState([]);
   const [visualizationType, setVisualizationType] = useState("graphs");
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem("darkMode") === "true"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, [darkMode]);
 
   const handleEditExpense = (expense) => {
     setSelectedExpense(expense);
@@ -56,48 +67,50 @@ function App() {
     setVisualizationType(event.target.value);
   };
 
+  const toggleTheme = () => {
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("darkMode", newMode);
+      return newMode;
+    });
+  };
+
   return (
-    <div className="app">
-      <header>
-        <h1>Expense Tracker</h1>
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <h1 style={{ paddingLeft: "7px" }}>Expense Tracker</h1>
+        <FormControlLabel
+          control={<Switch checked={darkMode} onChange={toggleTheme} />}
+          label="Dark Mode"
+        />
       </header>
-      <main>
-        <div className="top-section">
-          <div className="expense-visualization">
-            <h2>Visualization</h2>
+      <main className={styles.main}>
+        <div className={styles.topSection}>
+          <div className={styles.recurringExpenses}>
+            <RecurringExpenseList />
           </div>
-          <div className="budget-tracking">
-            <FormControl variant="outlined" className="visualization-select">
-              <InputLabel className="inputLabel">Visualization</InputLabel>
+          <div className={styles.budgetTracking}>
+            <FormControl
+              variant="outlined"
+              className={styles.visualizationSelect}
+            >
               <Select
                 value={visualizationType}
                 onChange={handleVisualizationChange}
                 label="Visualization"
-                className="outlinedInputRoot"
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      backgroundColor: "#1e1e3a",
-                      color: "#ffffff",
-                    },
-                  },
-                }}
               >
                 <MenuItem value="graphs">Graphs</MenuItem>
                 <MenuItem value="chart">Chart</MenuItem>
               </Select>
             </FormControl>
-            {visualizationType === "graphs" ? (
-              <BudgetGraphs />
-            ) : (
-              <BudgetChart />
-            )}
+            {visualizationType === "graphs" && <BudgetGraphs />}
+            {visualizationType === "chart" && <BudgetChart />}
           </div>
         </div>
-        <Box className="control-section">
-          <div className="control-section_contained">
+        <div className={styles.controlSection}>
+          <div className={styles.controlSectionContained}>
             <Button
-              className="select-multiple-button"
+              className={styles.selectMultipleButton}
               icon={
                 multiSelectMode ? (
                   <CheckBoxIcon />
@@ -110,28 +123,28 @@ function App() {
             {multiSelectMode && (
               <Button
                 onClick={handleRemoveSelectedExpenses}
-                className="removebtn-multiple"
+                className={styles.removebtnMultiple}
                 isDelete
                 icon={<DeleteIcon />}
               />
             )}
           </div>
 
-          <div className="control-section_contained">
+          <div className={styles.controlSectionContained}>
             <Button
               onClick={() => showBudgetModal(true)}
-              className="edit-budget-button"
+              className={styles.editBudgetButton}
             >
               Edit Budget
             </Button>
             <Button
               onClick={() => showExpenseModal(true)}
-              className="add-expense-button"
+              className={styles.addExpenseButton}
             >
               Add Expense
             </Button>
           </div>
-        </Box>
+        </div>
         <ExpenseList
           onEditExpense={handleEditExpense}
           onSelectExpenses={handleSelectExpenses}

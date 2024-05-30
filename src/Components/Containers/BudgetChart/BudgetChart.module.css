@@ -1,6 +1,8 @@
-.budget-chart__container {
-  background-color: #2c2c54;
-  color: #ffffff;
+@import "../../../variables.css";
+
+.budgetChartContainer {
+  background-color: var(--background-color-section);
+  color: var(--color-text);
   height: 100%;
   display: flex;
   justify-content: center;
@@ -10,14 +12,14 @@
   position: relative;
 }
 
-.budget-chart__container div {
+.budgetChartContainer div {
   width: 100%;
 }
 
-.budget-chart__container path {
+.budgetChartContainer path {
   stroke: none !important;
 }
 
-.budget-chart__container svg {
+.budgetChartContainer svg {
   width: 100% !important;
 }

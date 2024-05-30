@@ -6,14 +6,12 @@ const Legend = ({ data }) => {
   return (
     <Box className={styles.legend}>
       {data.map((entry) => (
-        <Box key={entry.id} className={styles["legend-item"]}>
+        <Box key={entry.id} className={styles.legendItem}>
           <Box
-            className={styles["legend-color"]}
+            className={styles.legendColor}
             style={{ backgroundColor: entry.color }}
           />
-          <Typography className={styles["legend-label"]}>
-            {entry.label}
-          </Typography>
+          <Typography className={styles.legendLabel}>{entry.label}</Typography>
         </Box>
       ))}
     </Box>

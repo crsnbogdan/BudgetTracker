@@ -1,85 +1,97 @@
-.total-expenses {
+@import "../../../variables.css";
+
+.totalExpenses {
   flex: 2;
   display: flex;
   flex-direction: column;
-  border: 1px solid #444;
-  background-color: #2c2c54;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: var(--background-color-section);
+  box-shadow: var(--box-shadow);
   overflow: hidden;
   width: 100%;
   position: relative;
 }
 
-.table-header {
+.tableHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1e1e3a;
+  background-color: var(--background-color-select);
+  border: 1px solid var(--background-color-select);
   padding: 10px;
-  padding-right: 26px;
-  width: 100%;
   border-radius: 4px 4px 0 0;
   position: sticky;
   top: 0;
   z-index: 1;
 }
 
-.table-header > p,
-.table-header > div {
+.tableHeader > div {
   width: 20%;
+  display: flex;
+  align-items: center;
 }
-.table-header svg {
+
+.tableHeader svg {
   margin-left: 5px !important;
   padding: 0 !important;
 }
 
-.table-field {
+.tableField {
   display: flex;
   align-items: center;
-  flex: 1;
-  color: white;
+  color: var(--color-text);
   text-align: left;
+  cursor: pointer;
 }
 
-.right-section {
+.rightSection {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin-left: auto;
 }
 
-.right-section > p {
+.rightSection > p {
   display: inline;
   text-align: right;
 }
 
-.expenses-list {
+.expensesList {
   flex: 1;
+  padding-top: 15px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 50px;
+  max-height: 500px;
+  position: relative;
 }
 
-.expenses-list::-webkit-scrollbar {
-  height: 10px;
+.expensesList::after {
+  content: "";
+  width: 10px;
+  flex-shrink: 0;
 }
 
-.expenses-list::-webkit-scrollbar-track {
-  background: #1e1e3a;
+.expensesList::-webkit-scrollbar {
+  width: 10px;
+}
+
+.expensesList::-webkit-scrollbar-track {
+  background: var(--background-color-select);
   border-radius: 8px;
 }
 
-.expenses-list::-webkit-scrollbar-thumb {
-  background: #5a67d8;
+.expensesList::-webkit-scrollbar-thumb {
+  background: var(--color-button-select-multiple);
   border-radius: 8px;
-  border: 2px solid #2c2c54;
+  border: 2px solid var(--background-color-section);
 }
 
-.edit-budget-button,
-.add-expense-button {
-  background-color: #5a67d8;
-  color: #ffffff;
+.editBudgetButton,
+.addExpenseButton {
+  background-color: var(--color-button-select-multiple);
+  color: var(--color-text);
   border: none;
   padding: 12px 16px;
   font-size: 14px;
@@ -87,11 +99,19 @@
   border-radius: 4px;
 }
 
-.edit-budget-button:hover,
-.add-expense-button:hover {
-  background-color: #434190;
+.editBudgetButton:hover,
+.addExpenseButton:hover {
+  background-color: var(--color-button-select-multiple-hover);
 }
 
 .activeSortIcon {
-  color: #a3a3ff !important;
+  color: var(--color-text-highlighted) !important;
+}
+
+.iconButton {
+  color: var(--color-text);
+}
+
+.iconButton:hover {
+  color: var(--color-text-highlighted);
 }

@@ -3,8 +3,8 @@ import { AppContext } from "../../../Context/ContextProvider";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, Typography } from "@mui/material";
-import { v4 as uuidv4 } from "uuid"; // Using uuid for unique IDs
+import { Box } from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
 import styles from "./EditBudget.module.css";
 
 const EditBudget = () => {
@@ -136,8 +136,8 @@ const EditBudget = () => {
   );
 
   return (
-    <Box className={styles["budget-container"]}>
-      <Box className={styles["form-row"]}>
+    <Box className={styles.budgetContainer}>
+      <Box className={styles.formRow}>
         <Input
           label="Total Budget"
           type="number"
@@ -145,27 +145,33 @@ const EditBudget = () => {
           onChange={handleTotalBudgetChange}
         />
       </Box>
-      <Box className={styles["form-row"]}>
-        <Typography className={styles["budget-total"]}>
-          Total Percentage Usage:
-        </Typography>
+      <Box className={styles.formRow}>
+        <span className={styles.budgetTotal}>Total Percentage Usage:</span>
         <span
-          style={{ color: totalPercentageUsage > 100 ? "#d35d6e" : "white" }}
+          style={{
+            color:
+              totalPercentageUsage > 100
+                ? "var(--color-button-remove)"
+                : "var(--color-text)",
+          }}
         >
           {parseFloat(totalPercentageUsage.toFixed(2))}%
         </span>
       </Box>
-      <Box className={styles["form-row"]}>
-        <Typography className={styles["budget-total"]}>
-          Total Used Amount:
-        </Typography>
+      <Box className={styles.formRow}>
+        <span className={styles.budgetTotal}>Total Used Amount:</span>
         <span
-          style={{ color: totalPercentageUsage > 100 ? "#d35d6e" : "white" }}
+          style={{
+            color:
+              totalPercentageUsage > 100
+                ? "var(--color-button-remove)"
+                : "var(--color-text)",
+          }}
         >
           ${totalUsedAmount.toFixed(2)}
         </span>
       </Box>
-      <Box className={styles["form-row"]}>
+      <Box className={styles.formRow}>
         <Input
           label="New Category"
           type="text"
@@ -176,31 +182,29 @@ const EditBudget = () => {
           type="color"
           value={newCategoryColor}
           onChange={(e) => setNewCategoryColor(e.target.value)}
-          className={styles["color-input"]}
+          className={styles.colorInput}
         />
         <Button
           onClick={handleAddCategory}
-          className={styles["add-category-button"]}
+          className={styles.addCategoryButton}
         >
           Add
         </Button>
       </Box>
-      <Typography variant="h6" gutterBottom>
-        Categories
-      </Typography>
-      <Box className={styles["categories-wrapper"]}>
+      <h2>Categories</h2>
+      <Box className={styles.categoriesWrapper}>
         {Object.keys(tempCategories).map((categoryId) => {
           const category = tempCategories[categoryId];
           return (
-            <Box key={categoryId} className={styles["category-group"]}>
-              <Box className={styles["category-info"]}>
+            <Box key={categoryId} className={styles.categoryGroup}>
+              <Box className={styles.categoryInfo}>
                 <Box
-                  className={styles["category-circle"]}
+                  className={styles.categoryCircle}
                   style={{ backgroundColor: category.color }}
                 />
-                <Typography>{category.name}</Typography>
+                <span>{category.name}</span>
               </Box>
-              <Box className={styles["category-controls"]}>
+              <Box className={styles.categoryControls}>
                 <Input
                   label="Amount"
                   type="number"
@@ -219,7 +223,7 @@ const EditBudget = () => {
                 />
                 <Button
                   onClick={() => handleRemoveCategory(categoryId)}
-                  className={styles["delete-button"]}
+                  className={styles.deleteButton}
                   isDelete
                   icon={<DeleteIcon />}
                 />
@@ -229,13 +233,13 @@ const EditBudget = () => {
         })}
       </Box>
       {totalPercentageUsage > 100 && (
-        <Typography className={styles["form-error"]}>
+        <span className={styles.formError}>
           Total percentage usage exceeds 100%. Please reduce category
           percentages before updating the budget.
-        </Typography>
+        </span>
       )}
-      <Box className={styles["form-row"]}>
-        <Button onClick={handleSubmit} className={styles["submit-button"]}>
+      <Box className={styles.formRow}>
+        <Button onClick={handleSubmit} className={styles.submitButton}>
           Update Budget
         </Button>
       </Box>

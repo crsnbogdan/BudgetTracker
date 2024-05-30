@@ -1,63 +1,69 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import "./BudgetGraphs.css";
+import dayjs from "dayjs";
+import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
+import styles from "./BudgetGraphs.module.css";
 
 const BudgetGraphs = () => {
   const { state } = useContext(AppContext);
-  const [hoveredCategory, setHoveredCategory] = useState(null);
+
+  const currentDate = dayjs();
+  const currentYear = currentDate.year();
+  const currentMonth = currentDate.month() + 1;
 
   const getCategoryBudgetInfo = (categoryId) => {
     const categoryInfo = state.categories[categoryId];
     const totalCategoryBudget =
       (parseFloat(categoryInfo.budget) / 100) * state.totalBudget;
-    const remainingCategoryBudget = totalCategoryBudget - categoryInfo.used;
+
+    let used = 0;
+
+    state.expenses[currentYear][currentMonth].forEach((expense) => {
+      if (expense.category === categoryId) {
+        used += expense.price;
+      }
+    });
+
+    state.recurringExpenses.forEach((recurringExpense) => {
+      const frequencyMultiplier = getFrequencyMultiplier(
+        recurringExpense.frequency
+      );
+      if (recurringExpense.category === categoryId) {
+        used += recurringExpense.amount * frequencyMultiplier;
+      }
+    });
 
     return {
       total: totalCategoryBudget,
-      used: categoryInfo.used,
-      remaining: remainingCategoryBudget,
+      used,
+      remaining: totalCategoryBudget - used,
     };
   };
 
-  const handleMouseEnter = (categoryId) => {
-    setHoveredCategory(categoryId);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredCategory(null);
-  };
-
   return (
-    <div className="budget-tracker">
-      <div className={`budget-overview ${hoveredCategory ? "highlight" : ""}`}>
+    <div className={styles.budgetTracker}>
+      <div className={styles.budgetOverview}>
         {Object.keys(state.categories).map((categoryId) => {
           const { total, used, remaining } = getCategoryBudgetInfo(categoryId);
-          const usedPercentage = (used / total) * 100;
+          const usedPercentage = total ? (used / total) * 100 : 0;
           const remainingPercentage = 100 - usedPercentage;
           const isOverBudget = used > total;
 
           return (
-            <div
-              key={categoryId}
-              className={`budget-category ${
-                hoveredCategory === categoryId ? "hovered" : ""
-              }`}
-              onMouseEnter={() => handleMouseEnter(categoryId)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <div className="budget-bar">
+            <div key={categoryId} className={styles.budgetCategory}>
+              <div className={styles.budgetBar}>
                 <div
-                  className="used-bar"
+                  className={styles.usedBar}
                   style={{
                     height: `${usedPercentage}%`,
                     backgroundColor: isOverBudget
-                      ? "#d35d6e"
+                      ? "var(--color-button-remove)"
                       : state.categories[categoryId].color,
                   }}
                 />
                 {remainingPercentage > 0 && !isOverBudget && (
                   <div
-                    className="remaining-bar"
+                    className={styles.remainingBar}
                     style={{
                       height: `${remainingPercentage}%`,
                     }}
@@ -65,22 +71,15 @@ const BudgetGraphs = () => {
                 )}
               </div>
               <span
-                className="category-label"
-                style={{ color: isOverBudget ? "#d35d6e" : "#b5b5b5" }}
+                className={styles.categoryLabel}
+                style={{
+                  color: isOverBudget
+                    ? "var(--color-button-remove)"
+                    : "#b5b5b5",
+                }}
               >
                 {state.categories[categoryId].name}
               </span>
-              {hoveredCategory === categoryId && (
-                <div className="tooltip">
-                  <p>Total Budget: ${total.toFixed(2)}</p>
-                  <p>Used: ${used.toFixed(2)}</p>
-                  {remaining.toFixed(2) >= 0 ? (
-                    <p>Remaining: ${remaining.toFixed(2)}</p>
-                  ) : (
-                    <p>Overrun: ${remaining.toFixed(2)}</p>
-                  )}
-                </div>
-              )}
             </div>
           );
         })}

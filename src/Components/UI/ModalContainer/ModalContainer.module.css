@@ -1,20 +1,22 @@
+@import "../../../variables.css";
+
 .MuiDialog-root .MuiPaper-root {
   background: transparent !important;
 }
 
-.modal-content {
-  background-color: #2c2c54;
-  color: #ffffff;
+.modalContent {
+  background-color: var(--background-color-section);
+  color: var(--color-text);
   position: relative;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--box-shadow);
 }
 
-.close-button {
-  color: #5a67d8;
+.closeButton {
+  color: var(--color-button-select-multiple);
   transition: color 0.3s ease;
 }
 
-.close-button:hover {
-  color: #434190;
+.closeButton:hover {
+  color: var(--color-button-select-multiple-hover);
 }

@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import CategoryFilter from "../../UI/CategoryFilter/CategoryFilter";
 import DateRangeFilter from "../../UI/DateRangeFilter/DateRangeFilter";
 import PriceRangeFilter from "../../UI/PriceRangeFilter/PriceRangeFilter";
-import { Box, Typography } from "@mui/material";
 import { AppContext } from "../../../Context/ContextProvider";
 import dayjs from "dayjs";
 import styles from "./Filters.module.css";
@@ -77,7 +76,7 @@ const Filters = () => {
       ...state.filters,
       dateRange: {
         ...state.filters.dateRange,
-        startDate: dayjs(startDate).format("YYYY-MM-DD"),
+        startDate: dayjs(startDate).format("DD-MM-YYYY"),
       },
     };
     updateFilters(newFilters);
@@ -88,7 +87,7 @@ const Filters = () => {
       ...state.filters,
       dateRange: {
         ...state.filters.dateRange,
-        endDate: dayjs(endDate).format("YYYY-MM-DD"),
+        endDate: dayjs(endDate).format("DD-MM-YYYY"),
       },
     };
     updateFilters(newFilters);
@@ -113,18 +112,16 @@ const Filters = () => {
   };
 
   return (
-    <Box className={styles["form-container"]}>
-      <Typography variant="h6" className={styles["form-header"]}>
-        Filters
-      </Typography>
-      <Box className={styles["form-row"]}>
+    <div className={styles.formContainer}>
+      <h2 className={styles.formHeader}>Filters</h2>
+      <div className={styles.formRow}>
         <CategoryFilter
           selectedCategories={state.filters.categories}
           handleCategoryChange={handleCategoryChange}
           categories={state.categories}
         />
-      </Box>
-      <Box className={styles["form-row"]}>
+      </div>
+      <div className={styles.formRow}>
         <DateRangeFilter
           startDate={state.filters.dateRange.startDate}
           endDate={state.filters.dateRange.endDate}
@@ -134,16 +131,16 @@ const Filters = () => {
           onEndDateChange={handleEndDateChange}
           predefinedRanges={predefinedRanges}
         />
-      </Box>
-      <Box className={styles["form-row"]}>
+      </div>
+      <div className={styles.formRow}>
         <PriceRangeFilter
           minPrice={state.filters.priceRange.minPrice}
           maxPrice={state.filters.priceRange.maxPrice}
           onMinPriceChange={handleMinPriceChange}
           onMaxPriceChange={handleMaxPriceChange}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

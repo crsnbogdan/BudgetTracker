@@ -8,7 +8,7 @@ import Filters from "../Filters/Filters";
 import Expense from "../../UI/Expense/Expense";
 import PersistentPopover from "../../UI/PersistentPopover/PersistentPopover";
 import dayjs from "dayjs";
-import { Box, Typography, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SortIcon from "@mui/icons-material/Sort";
 import styles from "./ExpenseList.module.css";
@@ -27,6 +27,10 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [selectedExpenses, setSelectedExpenses] = useState([]);
+
+  useEffect(() => {
+    console.log("ExpenseList rendered");
+  });
 
   const toggleFilters = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,17 +64,13 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
     setSortConfig({ key, direction });
   };
 
-  const getSortIconColor = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === "ascending" ||
-        sortConfig.direction === "descending"
-        ? "#a3a3ff"
-        : "white";
-    }
-    return "white";
+  const flattenExpenses = (expenses) => {
+    return Object.values(expenses).flatMap((year) =>
+      Object.values(year).flat()
+    );
   };
 
-  const sortedExpenses = [...state.expenses].sort((a, b) => {
+  const sortedExpenses = flattenExpenses(state.expenses).sort((a, b) => {
     if (sortConfig.direction === "") return 0;
     if (a[sortConfig.key] < b[sortConfig.key]) {
       return sortConfig.direction === "ascending" ? -1 : 1;
@@ -89,12 +89,15 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
 
     const matchesDateRange =
       (!state.filters.dateRange.startDate ||
-        dayjs(expense.date).isAfter(
-          dayjs(state.filters.dateRange.startDate).subtract(1, "day")
+        dayjs(expense.date, "DD-MM-YYYY").isAfter(
+          dayjs(state.filters.dateRange.startDate, "DD-MM-YYYY").subtract(
+            1,
+            "day"
+          )
         )) &&
       (!state.filters.dateRange.endDate ||
-        dayjs(expense.date).isBefore(
-          dayjs(state.filters.dateRange.endDate).add(1, "day")
+        dayjs(expense.date, "DD-MM-YYYY").isBefore(
+          dayjs(state.filters.dateRange.endDate, "DD-MM-YYYY").add(1, "day")
         ));
 
     const matchesPriceRange =
@@ -121,7 +124,7 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   }, [selectedExpenses, onSelectExpenses]);
 
   return (
-    <Box className={styles["total-expenses"]}>
+    <div className={styles.totalExpenses}>
       {state.showExpenseModal && (
         <ModalContainer
           isOpen={state.showExpenseModal}
@@ -147,12 +150,8 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
         </ModalContainer>
       )}
 
-      <Box className={styles["table-header"]}>
-        <Typography
-          className={`${styles["header-name"]} ${styles["table-field"]}`}
-          onClick={() => handleSort("name")}
-          sx={{ cursor: "pointer" }}
-        >
+      <div className={styles.tableHeader}>
+        <div className={styles.tableField} onClick={() => handleSort("name")}>
           Name
           <SortIcon
             className={
@@ -161,11 +160,10 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
                 : ""
             }
           />
-        </Typography>
-        <Typography
-          className={`${styles["header-category"]} ${styles["table-field"]}`}
+        </div>
+        <div
+          className={styles.tableField}
           onClick={() => handleSort("category")}
-          sx={{ cursor: "pointer" }}
         >
           Category
           <SortIcon
@@ -175,12 +173,8 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
                 : ""
             }
           />
-        </Typography>
-        <Typography
-          className={`${styles["header-price"]} ${styles["table-field"]}`}
-          onClick={() => handleSort("price")}
-          sx={{ cursor: "pointer" }}
-        >
+        </div>
+        <div className={styles.tableField} onClick={() => handleSort("price")}>
           Price
           <SortIcon
             className={
@@ -189,12 +183,8 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
                 : ""
             }
           />
-        </Typography>
-        <Typography
-          className={`${styles["header-date"]} ${styles["table-field"]}`}
-          onClick={() => handleSort("date")}
-          sx={{ cursor: "pointer" }}
-        >
+        </div>
+        <div className={styles.tableField} onClick={() => handleSort("date")}>
           Date
           <SortIcon
             className={
@@ -203,14 +193,10 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
                 : ""
             }
           />
-        </Typography>
-        <Box
-          className={styles["right-section"]}
-          onClick={toggleFilters}
-          sx={{ cursor: "pointer", marginLeft: "auto" }}
-        >
-          <Typography className={styles["header-date"]}>Filter</Typography>
-          <IconButton style={{ color: "#ffffff" }}>
+        </div>
+        <div className={styles.rightSection} onClick={toggleFilters}>
+          <p>Filter</p>
+          <IconButton className={styles.iconButton}>
             <FilterListIcon />
           </IconButton>
           <PersistentPopover
@@ -223,9 +209,9 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
               onFilterChange={handleFilterChange}
             />
           </PersistentPopover>
-        </Box>
-      </Box>
-      <Box className={styles["expenses-list"]}>
+        </div>
+      </div>
+      <div className={styles.expensesList}>
         {filteredExpenses.map((expense) => (
           <Expense
             key={expense.id}
@@ -242,8 +228,8 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
             multiSelectMode={multiSelectMode}
           />
         ))}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

@@ -4,16 +4,41 @@ import { Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import Legend from "../../UI/Legend/Legend";
 import styles from "./BudgetChart.module.css";
+import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
 
 const BudgetChart = () => {
   const { state } = useContext(AppContext);
 
   const calculateBudgetData = () => {
     let totalUsed = 0;
-    const data = Object.keys(state.categories).map((categoryId, index) => {
+    const categoryTotals = {};
+
+    Object.values(state.categories).forEach((category) => {
+      categoryTotals[category.id] = 0;
+    });
+
+    Object.values(state.expenses).forEach((year) => {
+      Object.values(year).forEach((monthExpenses) => {
+        monthExpenses.forEach((expense) => {
+          categoryTotals[expense.category] += expense.price || 0;
+          totalUsed += expense.price || 0;
+        });
+      });
+    });
+
+    state.recurringExpenses.forEach((recurringExpense) => {
+      const category = state.categories[recurringExpense.category];
+      const frequencyMultiplier = getFrequencyMultiplier(
+        recurringExpense.frequency
+      );
+      categoryTotals[recurringExpense.category] +=
+        recurringExpense.amount * frequencyMultiplier;
+      totalUsed += recurringExpense.amount * frequencyMultiplier;
+    });
+
+    const data = Object.keys(categoryTotals).map((categoryId, index) => {
       const category = state.categories[categoryId];
-      const used = category.used;
-      totalUsed += used;
+      const used = categoryTotals[categoryId];
       return {
         id: index,
         value: used,
@@ -40,28 +65,28 @@ const BudgetChart = () => {
   const budgetData = calculateBudgetData();
 
   return (
-    <Box className={styles["budget-chart__container"]}>
+    <div className={styles.budgetChartContainer}>
       <PieChart
-        className={styles["budget-chart"]}
+        className={styles.budgetChart}
         slotProps={{ legend: { hidden: true } }}
         series={[
           {
             highlightScope: { faded: "global", highlighted: "item" },
-            outerRadius: 180,
+            outerRadius: 150,
             data: budgetData,
-            paddingAngle: 5,
+            paddingAngle: 2,
             cornerRadius: 10,
-            startAngle: 0,
-            endAngle: 360,
+            startAngle: -90,
+            endAngle: 270,
             innerRadius: 60,
-            cx: 0,
+            cx: 100,
           },
         ]}
         width={400}
         height={400}
       />
       <Legend data={budgetData} />
-    </Box>
+    </div>
   );
 };
 

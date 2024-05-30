@@ -1,34 +1,36 @@
+@import "../../../variables.css";
+
 .categoryDropdown {
   margin-bottom: 14px;
   width: 100%;
 }
 
 .formLabel {
-  color: white !important;
+  color: var(--color-text) !important;
   font-size: 16px !important;
-  margin-top: 3px !important;
 }
 
 .outlinedInputRoot {
-  background-color: #1e1e3a;
-  color: #ffffff !important;
+  background-color: transparent;
+  color: var(--color-text) !important;
   height: 48px;
-  border: 1px solid #444;
+  margin-top: 3px !important;
+  border: 1px solid var(--background-color-select) !important;
 }
 
 .MuiSvgIcon-root {
-  color: #ffffff !important;
+  color: var(--color-text) !important;
 }
 
 .MuiMenuItem-root {
   display: flex;
   align-items: center;
   padding: 10px;
-  color: #ffffff;
+  color: var(--color-text);
 }
 
 .MuiMenuItem-root:hover {
-  background-color: #333366;
+  background-color: var(--background-color-select-hover);
 }
 
 .MuiCheckbox-root,

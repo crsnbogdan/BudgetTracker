@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Checkbox } from "@mui/material";
+import { Typography, Checkbox } from "@mui/material";
 import dayjs from "dayjs";
 import Button from "../../UI/Button/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,18 +17,69 @@ const Expense = ({
   onSelect,
   isSelected,
   multiSelectMode,
+  isSmall,
+  frequency,
 }) => {
   const formatDateString = (dateString) => {
-    const date = dayjs(dateString);
-    return date.format("DD/MM/YY");
+    const date = dayjs(dateString, "DD-MM-YYYY");
+    return date.format("DD/MM/YYYY");
   };
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  const formattedName =
+    isSmall && frequency
+      ? `${capitalizeFirstLetter(frequency)} - ${name}`
+      : name;
+
+  const formattedPrice = price !== undefined ? price.toFixed(2) : "0.00";
+
+  if (isSmall) {
+    return (
+      <div className={styles.expenseItemSmall}>
+        <div className={styles.expenseFieldSmall}>
+          <div
+            className={styles.categoryCircleSmall}
+            style={{
+              backgroundColor: categories[category]?.color,
+            }}
+          />
+          <p style={{ width: "70%" }} className={styles.expenseNameSmall}>
+            {formattedName}
+          </p>
+        </div>
+
+        <p className={styles.expenseFieldSmall}>{categories[category]?.name}</p>
+
+        <p
+          className={styles.expenseField}
+          style={{ textAlign: "right", marginRight: "20px" }}
+        >
+          ${formattedPrice}
+        </p>
+        <div className={styles.actionContainerSmall}>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove();
+            }}
+            className={styles.removeButtonSmall}
+            isDelete
+            icon={<DeleteIcon />}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <Box
+    <div
       className={styles.expenseItem}
       onClick={multiSelectMode ? onSelect : null}
     >
-      <Box className={styles.expenseField}>
+      <div className={styles.expenseField}>
         {multiSelectMode ? (
           <Checkbox
             checked={isSelected}
@@ -37,30 +88,22 @@ const Expense = ({
             }}
           />
         ) : (
-          <Box
+          <div
             className={styles.categoryCircle}
             style={{ backgroundColor: categories[category]?.color }}
           />
         )}
-        <Typography className={styles.expenseName}>{name}</Typography>
-      </Box>
+        <p className={styles.expenseName}>{name}</p>
+      </div>
 
-      <Typography className={styles.expenseField}>
-        {categories[category]?.name}
-      </Typography>
-      <Typography
-        className={styles.expenseField}
-        style={{ textAlign: "right" }}
-      >
-        ${price.toFixed(2)}
-      </Typography>
-      <Typography
-        className={styles.expenseField}
-        style={{ textAlign: "right" }}
-      >
+      <p className={styles.expenseField}>{categories[category]?.name}</p>
+      <p className={styles.expenseField} style={{ textAlign: "right" }}>
+        ${formattedPrice}
+      </p>
+      <p className={styles.expenseField} style={{ textAlign: "right" }}>
         {formatDateString(date)}
-      </Typography>
-      <Box className={styles.actionContainer}>
+      </p>
+      <div className={styles.actionContainer}>
         <Button
           onClick={(e) => {
             e.stopPropagation();
@@ -78,8 +121,8 @@ const Expense = ({
           isDelete
           icon={<DeleteIcon />}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

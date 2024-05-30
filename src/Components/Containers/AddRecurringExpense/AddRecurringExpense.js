@@ -4,45 +4,49 @@ import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
 import dayjs from "dayjs";
-import styles from "./AddExpense.module.css";
 import uniquid from "uniquid";
+import styles from "./AddRecurringExpense.module.css";
 
-const AddExpense = () => {
-  const { dispatch, showExpenseModal, categories } = useContext(AppContext);
+const AddRecurringExpense = ({ onClose }) => {
+  const { dispatch, categories } = useContext(AppContext);
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
+  const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
-  const [date, setDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [frequency, setFrequency] = useState("");
 
   const handleCategoryChange = (event) => setCategory(event.target.value);
-  const handlePriceChange = (event) => setPrice(event.target.value);
+  const handleAmountChange = (event) => setAmount(event.target.value);
   const handleNameChange = (event) => setName(event.target.value);
-  const handleDateChange = (newDate) => setDate(dayjs(newDate, "DD-MM-YYYY"));
+  const handleDateChange = (newDate) =>
+    setStartDate(dayjs(newDate, "DD-MM-YYYY"));
+  const handleFrequencyChange = (event) => setFrequency(event.target.value);
 
   const handleAdd = (e) => {
     e.preventDefault();
 
-    const expenseDate = date || dayjs();
-    if (!name || !category || !price) return;
+    const expenseStartDate = startDate || dayjs();
+    if (!name || !category || !amount || !frequency) return;
 
     const payload = {
       name,
-      price: Number(price),
+      amount: Number(amount),
       category,
-      date: expenseDate.format("DD-MM-YYYY"),
+      startDate: expenseStartDate.format("DD-MM-YYYY"),
+      frequency,
       id: uniquid(),
     };
 
     dispatch({
-      type: "addExpense",
+      type: "addRecurringExpense",
       payload,
     });
 
-    showExpenseModal(false);
+    onClose();
   };
 
   return (
-    <div className={styles.addExpenseForm}>
+    <div className={styles.addRecurringExpenseForm}>
       <div className={styles.formRow}>
         <CategoryDropdown
           category={category}
@@ -52,10 +56,10 @@ const AddExpense = () => {
       </div>
       <div className={styles.formRow}>
         <Input
-          label="Price"
+          label="Amount"
           type="number"
-          value={price}
-          onChange={handlePriceChange}
+          value={amount}
+          onChange={handleAmountChange}
         />
       </div>
       <div className={styles.formRow}>
@@ -68,10 +72,22 @@ const AddExpense = () => {
       </div>
       <div className={styles.formRow}>
         <Input
-          label="Date"
+          label="Start Date"
           type="date"
-          value={date ? date.format("DD-MM-YYYY") : ""}
+          value={startDate ? startDate.format("DD-MM-YYYY") : ""}
           onChange={handleDateChange}
+        />
+      </div>
+      <div className={styles.formRow}>
+        <CategoryDropdown
+          label="Frequency"
+          value={frequency}
+          onChange={handleFrequencyChange}
+          categories={{
+            daily: { name: "Daily", color: "#ffffff" },
+            weekly: { name: "Weekly", color: "#ffffff" },
+            monthly: { name: "Monthly", color: "#ffffff" },
+          }}
         />
       </div>
       <div className={styles.formControl}>
@@ -83,4 +99,4 @@ const AddExpense = () => {
   );
 };
 
-export default AddExpense;
+export default AddRecurringExpense;

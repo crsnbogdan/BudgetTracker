@@ -1,32 +1,58 @@
+@import "../../../variables.css";
+
+body::-webkit-scrollbar {
+  height: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #1e1e3a;
+  border-radius: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #5a67d8;
+  border-radius: 8px;
+  border: 2px solid #2c2c54;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #434190;
+}
+
 .button {
-  background-color: #5a67d8 !important;
-  color: #ffffff;
+  background-color: var(--color-button-select-multiple) !important;
+  color: var(--color-text);
   border: none;
   padding: 7px 14px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: var(--font-size);
   transition: background-color 0.3s ease;
   cursor: pointer;
   border-radius: 4px;
 }
 
+.button span {
+  margin-right: 0 !important;
+  margin-left: 1px !important;
+}
+
 .button:hover {
-  background-color: #434190 !important;
+  background-color: var(--color-button-select-multiple-hover) !important;
 }
 
 .deleteButton {
-  background-color: #d35d6e !important;
-  color: #ffffff;
+  background-color: var(--color-button-remove) !important;
+  color: var(--color-text);
 }
 
 .deleteButton:hover {
-  background-color: #b4434a !important;
+  background-color: var(--color-button-remove-hover) !important;
 }
 
-.submit-button,
-.add-category-button {
+.submitButton,
+.addCategoryButton {
   padding: 7px 14px;
   font-size: 16px;
 }

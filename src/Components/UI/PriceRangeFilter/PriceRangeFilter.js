@@ -1,7 +1,6 @@
 import React from "react";
-import { Box } from "@mui/material";
 import Input from "../Input/Input";
-import styles from "./PriceRangeFilter.module.css";
+import "./PriceRangeFilter.module.css";
 
 const PriceRangeFilter = ({
   minPrice,
@@ -10,7 +9,7 @@ const PriceRangeFilter = ({
   onMaxPriceChange,
 }) => {
   return (
-    <Box className={styles["price-range-filter"]}>
+    <div className="priceRangeFilter">
       <Input
         type="number"
         label="Min Price"
@@ -33,7 +32,7 @@ const PriceRangeFilter = ({
           },
         }}
       />
-    </Box>
+    </div>
   );
 };
 
