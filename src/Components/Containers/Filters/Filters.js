@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import CategoryFilter from "../../UI/CategoryFilter/CategoryFilter";
-import DateRangeFilter from "../../UI/DateRangeFilter/DateRangeFilter";
-import PriceRangeFilter from "../../UI/PriceRangeFilter/PriceRangeFilter";
+import CategoryFilter from "../../UI/CategoryFilter/CategoryFilter.tsx";
+import DateRangeFilter from "../../UI/DateRangeFilter/DateRangeFilter.tsx";
+import PriceRangeFilter from "../../UI/PriceRangeFilter/PriceRangeFilter.tsx";
 import { AppContext } from "../../../Context/ContextProvider";
 import dayjs from "dayjs";
 import styles from "./Filters.module.css";

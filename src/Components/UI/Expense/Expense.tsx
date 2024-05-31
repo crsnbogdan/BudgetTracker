@@ -1,10 +1,10 @@
-import React from "react";
-import { Typography, Checkbox } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import dayjs from "dayjs";
-import Button from "../../UI/Button/Button";
+import Button from "../Button/Button.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import styles from "./Expense.module.css";
+import { Expense as ExpenseProps } from "../../../Types";
 
 const Expense = ({
   name,
@@ -19,14 +19,14 @@ const Expense = ({
   multiSelectMode,
   isSmall,
   frequency,
-}) => {
-  const formatDateString = (dateString) => {
+}: ExpenseProps) => {
+  const formatDateString = (dateString: string) => {
     const date = dayjs(dateString, "DD-MM-YYYY");
     return date.format("DD/MM/YYYY");
   };
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
   const formattedName =
@@ -61,10 +61,7 @@ const Expense = ({
         </p>
         <div className={styles.actionContainerSmall}>
           <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemove();
-            }}
+            onClick={onRemove}
             className={styles.removeButtonSmall}
             isDelete
             icon={<DeleteIcon />}
@@ -77,7 +74,7 @@ const Expense = ({
   return (
     <div
       className={styles.expenseItem}
-      onClick={multiSelectMode ? onSelect : null}
+      onClick={multiSelectMode ? onSelect : undefined}
     >
       <div className={styles.expenseField}>
         {multiSelectMode ? (
@@ -105,18 +102,12 @@ const Expense = ({
       </p>
       <div className={styles.actionContainer}>
         <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onEdit();
-          }}
+          onClick={onEdit}
           className={styles.editButton}
           icon={<EditIcon sx={{ margin: "2px" }} />}
         />
         <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove();
-          }}
+          onClick={onRemove}
           className={styles.removeButton}
           isDelete
           icon={<DeleteIcon />}

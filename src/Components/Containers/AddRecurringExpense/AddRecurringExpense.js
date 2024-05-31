@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
-import Input from "../../UI/Input/Input";
-import Button from "../../UI/Button/Button";
+import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown.tsx";
+import Input from "../../UI/Input/Input.tsx";
+import Button from "../../UI/Button/Button.tsx";
 import dayjs from "dayjs";
 import uniquid from "uniquid";
 import styles from "./AddRecurringExpense.module.css";
@@ -12,14 +12,13 @@ const AddRecurringExpense = ({ onClose }) => {
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [startDate, setStartDate] = useState(dayjs());
   const [frequency, setFrequency] = useState("");
 
   const handleCategoryChange = (event) => setCategory(event.target.value);
-  const handleAmountChange = (event) => setAmount(event.target.value);
-  const handleNameChange = (event) => setName(event.target.value);
-  const handleDateChange = (newDate) =>
-    setStartDate(dayjs(newDate, "DD-MM-YYYY"));
+  const handleAmountChange = (value) => setAmount(value);
+  const handleNameChange = (value) => setName(value);
+  const handleDateChange = (newDate) => setStartDate(newDate);
   const handleFrequencyChange = (event) => setFrequency(event.target.value);
 
   const handleAdd = (e) => {
@@ -74,14 +73,14 @@ const AddRecurringExpense = ({ onClose }) => {
         <Input
           label="Start Date"
           type="date"
-          value={startDate ? startDate.format("DD-MM-YYYY") : ""}
+          value={startDate}
           onChange={handleDateChange}
         />
       </div>
       <div className={styles.formRow}>
         <CategoryDropdown
           label="Frequency"
-          value={frequency}
+          category={frequency}
           onChange={handleFrequencyChange}
           categories={{
             daily: { name: "Daily", color: "#ffffff" },

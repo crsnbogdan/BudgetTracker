@@ -5,7 +5,7 @@ import ExpenseList from "./Components/Containers/ExpenseList/ExpenseList";
 import BudgetGraphs from "./Components/Containers/BudgetGraphs/BudgetGraphs";
 import BudgetChart from "./Components/Containers/BudgetChart/BudgetChart";
 import RecurringExpenseList from "./Components/Containers/RecurringExpenseList/RecurringExpenseList";
-import Button from "./Components/UI/Button/Button";
+import Button from "./Components/UI/Button/Button.tsx";
 import {
   Select,
   MenuItem,
@@ -16,10 +16,10 @@ import {
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
+import "./variables.css";
 
 function App() {
   const {
-    state,
     showEditExpenseModal,
     setSelectedExpense,
     showBudgetModal,

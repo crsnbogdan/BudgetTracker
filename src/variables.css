@@ -25,10 +25,10 @@ body.dark-mode {
   --background-color-select-hover: #3c3c3c;
   --color-text: #e0e0e0;
   --color-text-highlighted: #64b5f6;
-  --color-button-remove: #ff4444; /* Increased contrast */
-  --color-button-remove-hover: #cc0000; /* Increased contrast */
-  --color-button-select-multiple: #82b1ff; /* Increased contrast */
-  --color-button-select-multiple-hover: #448aff; /* Increased contrast */
+  --color-button-remove: #ff4444;
+  --color-button-remove-hover: #cc0000;
+  --color-button-select-multiple: #82b1ff;
+  --color-button-select-multiple-hover: #448aff;
   --border-color: #333333;
   --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }

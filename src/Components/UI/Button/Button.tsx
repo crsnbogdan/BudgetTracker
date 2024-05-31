@@ -1,6 +1,19 @@
-import React from "react";
-import { Button as MuiButton } from "@mui/material";
+import { ReactNode } from "react";
+import {
+  Button as MuiButton,
+  ButtonProps as MuiButtonProps,
+} from "@mui/material";
 import styles from "./Button.module.css";
+
+type ButtonProps = {
+  children?: ReactNode;
+  onClick: () => void;
+  variant?: MuiButtonProps["variant"];
+  color?: MuiButtonProps["color"];
+  className?: string;
+  isDelete?: boolean;
+  icon?: ReactNode;
+};
 
 const Button = ({
   children,
@@ -10,7 +23,7 @@ const Button = ({
   className,
   isDelete = false,
   icon,
-}) => {
+}: ButtonProps) => {
   return (
     <MuiButton
       variant={variant}

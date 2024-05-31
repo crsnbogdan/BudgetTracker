@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import ModalContainer from "../../UI/ModalContainer/ModalContainer";
+import ModalContainer from "../../UI/ModalContainer/ModalContainer.tsx";
 import AddExpense from "../AddExpense/AddExpense";
-import EditExpense from "../EditExpense/EditExpense";
+import EditExpense from "../EditExpense/EditExpense.js";
 import EditBudget from "../EditBudget/EditBudget";
 import Filters from "../Filters/Filters";
-import Expense from "../../UI/Expense/Expense";
-import PersistentPopover from "../../UI/PersistentPopover/PersistentPopover";
+import Expense from "../../UI/Expense/Expense.tsx";
+import PersistentPopover from "../../UI/PersistentPopover/PersistentPopover.tsx";
 import dayjs from "dayjs";
 import { IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -27,10 +27,6 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [selectedExpenses, setSelectedExpenses] = useState([]);
-
-  useEffect(() => {
-    console.log("ExpenseList rendered");
-  });
 
   const toggleFilters = (event) => {
     setAnchorEl(event.currentTarget);

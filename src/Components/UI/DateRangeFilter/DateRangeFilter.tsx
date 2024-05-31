@@ -1,7 +1,34 @@
-import React from "react";
-import { Select, MenuItem, InputLabel, FormControl } from "@mui/material";
-import Input from "../Input/Input";
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  SelectChangeEvent,
+} from "@mui/material";
+import Input from "../Input/Input.tsx";
 import styles from "./DateRangeFilter.module.css";
+import { Dayjs } from "dayjs";
+
+type DateRangeFilterProps = {
+  startDate: string;
+  endDate: string;
+  selectedRange:
+    | "custom"
+    | "today"
+    | "yesterday"
+    | "last7"
+    | "thisMonth"
+    | "lastMonth"
+    | "thisYear"
+    | "lastYear";
+  onRangeChange: (e: SelectChangeEvent) => void;
+  onStartDateChange: (value: string | Dayjs | null) => void;
+  onEndDateChange: (value: string | Dayjs | null) => void;
+  predefinedRanges: {
+    label: string;
+    value: string;
+  }[];
+};
 
 const DateRangeFilter = ({
   startDate,
@@ -11,21 +38,21 @@ const DateRangeFilter = ({
   onStartDateChange,
   onEndDateChange,
   predefinedRanges,
-}) => {
+}: DateRangeFilterProps) => {
   return (
     <div className={styles.dateRangeFilter}>
       <FormControl fullWidth variant="outlined" className={styles.formControl}>
         <InputLabel className={styles.inputLabel}>Date Range</InputLabel>
         <Select
           value={selectedRange}
-          onChange={(e) => onRangeChange(e.target.value)}
+          onChange={onRangeChange}
           label="Date Range"
           className={styles.outlinedInputRoot}
           MenuProps={{
             PaperProps: {
               style: {
-                backgroundColor: "#1e1e3a",
-                color: "#ffffff",
+                backgroundColor: "var(--background-color-app)",
+                color: "black",
               },
             },
           }}

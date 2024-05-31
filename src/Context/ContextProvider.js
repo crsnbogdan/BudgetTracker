@@ -461,8 +461,6 @@ const AppReducer = (state, action) => {
       break;
   }
 
-  console.log("Updated State:", updatedState);
-
   return {
     ...updatedState,
     categories: calculateUsedBudget(updatedState),

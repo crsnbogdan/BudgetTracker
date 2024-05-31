@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
-import Input from "../../UI/Input/Input";
-import Button from "../../UI/Button/Button";
+import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown.tsx";
+import Input from "../../UI/Input/Input.tsx";
+import Button from "../../UI/Button/Button.tsx";
 import dayjs from "dayjs";
 import styles from "./EditExpense.module.css";
 

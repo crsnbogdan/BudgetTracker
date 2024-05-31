@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import Input from "../../UI/Input/Input";
-import Button from "../../UI/Button/Button";
+import Input from "../../UI/Input/Input.tsx";
+import Button from "../../UI/Button/Button.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";

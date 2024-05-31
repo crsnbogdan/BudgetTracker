@@ -1,9 +1,15 @@
-import React from "react";
+import { ReactNode } from "react";
 import { Dialog, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./ModalContainer.module.css";
 
-const ModalContainer = ({ children, isOpen, onClose }) => {
+type ModalContainerProps = {
+  children: ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+const ModalContainer = ({ children, isOpen, onClose }: ModalContainerProps) => {
   return (
     <Dialog
       open={isOpen}

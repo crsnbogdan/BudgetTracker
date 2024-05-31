@@ -8,8 +8,18 @@ import {
   Radio,
   ListItemText,
   FormControlLabel,
+  SelectChangeEvent,
 } from "@mui/material";
 import styles from "./CategoryDropdown.module.css";
+import { Categories } from "../../../Types";
+
+type CategoryDropdownProps = {
+  label?: string;
+  categories: Categories;
+  category: string | string[];
+  onChange: (e: SelectChangeEvent<string | string[]>) => void;
+  multiple: boolean;
+};
 
 const CategoryDropdown = ({
   label = "Category",
@@ -17,7 +27,9 @@ const CategoryDropdown = ({
   category,
   onChange,
   multiple,
-}) => {
+}: CategoryDropdownProps) => {
+  const isCategoryArray = Array.isArray(category);
+
   return (
     <FormControl
       fullWidth
@@ -32,18 +44,22 @@ const CategoryDropdown = ({
         label="Category"
         renderValue={(selected) =>
           multiple
-            ? selected.map((catId) => categories[catId]?.name).join(", ")
-            : categories[selected]?.name || "Select a category"
+            ? (selected as string[])
+                .map((catId) => categories[catId]?.name)
+                .join(", ")
+            : categories[selected as string]?.name || "Select a category"
         }
         className={styles.outlinedInputRoot}
         style={{
-          borderColor: categories[category]?.color || "#444",
+          borderColor: isCategoryArray
+            ? categories[category[0]]?.color || "#444"
+            : categories[category as string]?.color || "#444",
         }}
         MenuProps={{
           PaperProps: {
             style: {
-              backgroundColor: "#1e1e3a",
-              color: "#ffffff",
+              backgroundColor: "var(--background-color-app)",
+              color: "black",
             },
           },
         }}
@@ -53,7 +69,7 @@ const CategoryDropdown = ({
             {multiple ? (
               <>
                 <Checkbox
-                  checked={category.includes(catId)}
+                  checked={isCategoryArray && category.includes(catId)}
                   style={{ color: categories[catId].color }}
                 />
                 <ListItemText primary={categories[catId].name} />

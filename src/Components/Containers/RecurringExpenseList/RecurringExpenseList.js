@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import Button from "../../UI/Button/Button";
-import ModalContainer from "../../UI/ModalContainer/ModalContainer";
+import Button from "../../UI/Button/Button.tsx";
+import ModalContainer from "../../UI/ModalContainer/ModalContainer.tsx";
 import AddRecurringExpense from "../AddRecurringExpense/AddRecurringExpense";
-import Expense from "../../UI/Expense/Expense";
+import Expense from "../../UI/Expense/Expense.tsx";
 import styles from "./RecurringExpenseList.module.css";
 
 const RecurringExpenseList = () => {

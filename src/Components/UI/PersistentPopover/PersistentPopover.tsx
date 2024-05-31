@@ -1,9 +1,22 @@
-import React from "react";
-import { Popover, Box } from "@mui/material";
+import { ReactNode } from "react";
+import { Popover } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./PersistentPopover.module.css";
 
-const PersistentPopover = ({ anchorEl, isOpen, onClose, children }) => {
+type PersistentPopoverProps = {
+  anchorEl: Element;
+  isOpen: boolean;
+  onClose: () => void;
+
+  children: ReactNode;
+};
+
+const PersistentPopover = ({
+  anchorEl,
+  isOpen,
+  onClose,
+  children,
+}: PersistentPopoverProps) => {
   return (
     <Popover
       open={isOpen}
@@ -19,13 +32,13 @@ const PersistentPopover = ({ anchorEl, isOpen, onClose, children }) => {
       }}
       disableRestoreFocus
     >
-      <Box
+      <div
         className={styles.popoverContainer}
         onClick={(e) => e.stopPropagation()}
       >
         <CloseIcon onClick={onClose} className={styles.closeButton} />
         {children}
-      </Box>
+      </div>
     </Popover>
   );
 };
