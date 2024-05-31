@@ -25,5 +25,6 @@ export type Expense = {
   isSelected: boolean;
   multiSelectMode: boolean;
   isSmall: boolean;
+  id: string;
   frequency: "daily" | "monthly" | "weekly";
 };

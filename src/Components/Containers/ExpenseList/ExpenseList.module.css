@@ -108,7 +108,7 @@
   color: var(--color-text-highlighted) !important;
 }
 
-.iconButton {
+.iconButton svg {
   color: var(--color-text);
 }
 

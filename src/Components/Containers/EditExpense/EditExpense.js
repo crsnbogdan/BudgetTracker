@@ -29,8 +29,8 @@ const EditExpense = () => {
   }, [selectedExpense]);
 
   const handleCategoryChange = (event) => setCategory(event.target.value);
-  const handlePriceChange = (event) => setPrice(event.target.value);
-  const handleNameChange = (event) => setName(event.target.value);
+  const handlePriceChange = (value) => setPrice(value);
+  const handleNameChange = (event) => setName(event);
   const handleDateChange = (newDate) => {
     setDate(dayjs(newDate, "DD-MM-YYYY"));
   };

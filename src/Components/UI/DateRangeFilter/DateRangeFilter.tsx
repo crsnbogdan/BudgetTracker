@@ -52,7 +52,7 @@ const DateRangeFilter = ({
             PaperProps: {
               style: {
                 backgroundColor: "var(--background-color-app)",
-                color: "black",
+                color: "var(--color-text)",
               },
             },
           }}

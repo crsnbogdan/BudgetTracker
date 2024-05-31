@@ -125,15 +125,15 @@ body::-webkit-scrollbar-thumb:hover {
   background-color: none;
   color: var(--color-text);
 }
+.visualizationSelect > div,
+.visualizationSelect svg {
+  color: var(--color-text);
+}
 
 .visualizationSelect .MuiOutlinedInput-root {
   background-color: var(--background-color-select);
   color: var(--color-text) !important;
-  border: 1px solid var(--border-color);
-}
-
-.visualizationSelect .MuiSvgIcon-root {
-  color: var(--color-text) !important;
+  border: 1px solid var(--color-text) !important;
 }
 
 .visualizationSelect .MuiMenuItem-root {

@@ -12,24 +12,23 @@ import {
   FormControl,
   Switch,
   FormControlLabel,
+  SelectChangeEvent,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./variables.css";
+import { Expense } from "./Types";
 
 function App() {
-  const {
-    showEditExpenseModal,
-    setSelectedExpense,
-    showBudgetModal,
-    showExpenseModal,
-    removeMultipleExpenses,
-  } = useContext(AppContext);
+  const { showBudgetModal, showExpenseModal, removeMultipleExpenses } =
+    useContext(AppContext);
 
-  const [multiSelectMode, setMultiSelectMode] = useState(false);
-  const [selectedExpenses, setSelectedExpenses] = useState([]);
-  const [visualizationType, setVisualizationType] = useState("graphs");
+  const [multiSelectMode, setMultiSelectMode] = useState<boolean>(false);
+  const [selectedExpenses, setSelectedExpenses] = useState<[] | Expense[]>([]);
+  const [visualizationType, setVisualizationType] = useState<
+    "graphs" | "chart"
+  >("graphs");
   const [darkMode, setDarkMode] = useState(
     () => localStorage.getItem("darkMode") === "true"
   );
@@ -42,35 +41,31 @@ function App() {
     }
   }, [darkMode]);
 
-  const handleEditExpense = (expense) => {
-    setSelectedExpense(expense);
-    showEditExpenseModal(true);
-  };
-
   const toggleMultiSelectMode = () => {
     setMultiSelectMode((prevMode) => !prevMode);
     setSelectedExpenses([]);
   };
 
-  const handleSelectExpenses = (expenses) => {
+  const handleSelectExpenses = (expenses: Expense[]) => {
     setSelectedExpenses(expenses);
   };
 
   const handleRemoveSelectedExpenses = () => {
     const ids = selectedExpenses.map((expense) => expense.id);
+    console.log(ids);
     removeMultipleExpenses(ids);
     setSelectedExpenses([]);
     setMultiSelectMode(false);
   };
 
-  const handleVisualizationChange = (event) => {
-    setVisualizationType(event.target.value);
+  const handleVisualizationChange = (str: "graphs" | "chart") => {
+    setVisualizationType(str);
   };
 
   const toggleTheme = () => {
     setDarkMode((prevMode) => {
       const newMode = !prevMode;
-      localStorage.setItem("darkMode", newMode);
+      localStorage.setItem("darkMode", JSON.stringify(newMode));
       return newMode;
     });
   };
@@ -96,7 +91,14 @@ function App() {
             >
               <Select
                 value={visualizationType}
-                onChange={handleVisualizationChange}
+                onChange={(e) => {
+                  if (
+                    e.target.value === "graphs" ||
+                    e.target.value === "chart"
+                  ) {
+                    handleVisualizationChange(e.target.value);
+                  }
+                }}
                 label="Visualization"
               >
                 <MenuItem value="graphs">Graphs</MenuItem>
@@ -146,7 +148,6 @@ function App() {
           </div>
         </div>
         <ExpenseList
-          onEditExpense={handleEditExpense}
           onSelectExpenses={handleSelectExpenses}
           multiSelectMode={multiSelectMode}
         />
