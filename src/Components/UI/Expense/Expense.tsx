@@ -4,7 +4,7 @@ import Button from "../Button/Button.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import styles from "./Expense.module.css";
-import { RecurringExpense, SingleExpense } from "../../../Types";
+import { ExpenseProps } from "../../../Types";
 
 const Expense = ({
   name,
@@ -19,7 +19,7 @@ const Expense = ({
   multiSelectMode,
   isSmall,
   frequency,
-}: SingleExpense) => {
+}: ExpenseProps) => {
   const formatDateString = (dateString: string) => {
     const date = dayjs(dateString, "DD-MM-YYYY");
     return date.format("DD/MM/YYYY");
@@ -43,7 +43,6 @@ const Expense = ({
           <div
             className={styles.categoryCircleSmall}
             style={{
-              // @ts-ignore
               backgroundColor: categories[category]?.color,
             }}
           />
@@ -51,12 +50,7 @@ const Expense = ({
             {formattedName}
           </p>
         </div>
-        <p className={styles.expenseFieldSmall}>
-          {
-            // @ts-ignore
-            categories[category]?.name
-          }
-        </p>
+        <p className={styles.expenseFieldSmall}>{categories[category]?.name}</p>
         <p
           className={styles.expenseField}
           style={{ textAlign: "right", marginRight: "20px" }}
@@ -85,7 +79,6 @@ const Expense = ({
           <Checkbox
             checked={isSelected}
             style={{
-              // @ts-ignore
               color: categories[category]?.color,
             }}
           />
@@ -93,19 +86,13 @@ const Expense = ({
           <div
             className={styles.categoryCircle}
             style={{
-              // @ts-ignore
               backgroundColor: categories[category]?.color,
             }}
           />
         )}
         <p className={styles.expenseName}>{name}</p>
       </div>
-      <p className={styles.expenseField}>
-        {
-          // @ts-ignore
-          categories[category]?.name
-        }
-      </p>
+      <p className={styles.expenseField}>{categories[category]?.name}</p>
       <p className={styles.expenseField} style={{ textAlign: "right" }}>
         ${formattedPrice}
       </p>

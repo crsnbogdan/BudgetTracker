@@ -1,31 +1,41 @@
-import React, { useContext, useState } from "react";
+import React, { ChangeEvent, useContext, useState, MouseEvent } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
 import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import styles from "./AddExpense.module.css";
+// @ts-ignore
 import uniqid from "uniquid";
+import { SelectChangeEvent } from "@mui/material";
+import { Expense } from "../../../Types";
 
 const AddExpense = () => {
   const { dispatch, showExpenseModalFunc, state } = useContext(AppContext);
-  const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
-  const [name, setName] = useState("");
-  const [date, setDate] = useState(dayjs());
+  const [category, setCategory] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [date, setDate] = useState<Dayjs>(dayjs());
 
-  const handleCategoryChange = (event) => setCategory(event.target.value);
-  const handlePriceChange = (value) => setPrice(value);
-  const handleNameChange = (value) => setName(value);
-  const handleDateChange = (newDate) => setDate(newDate);
+  const handleCategoryChange = (event: SelectChangeEvent<string | string[]>) =>
+    setCategory(String(event.target.value));
+  const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setPrice(event.target.value);
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setName(event.target.value);
+  const handleDateChange = (newDate: Dayjs | null) => {
+    if (newDate) {
+      setDate(newDate);
+    }
+  };
 
-  const handleAdd = (e) => {
-    e.preventDefault();
+  const handleAdd = (e?: MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
 
     const expenseDate = date || dayjs();
     if (!name || !category || !price) return;
 
-    const payload = {
+    const payload: Expense = {
       name,
       price: Number(price),
       category,
@@ -55,7 +65,9 @@ const AddExpense = () => {
           label="Price"
           type="number"
           value={price}
-          onChange={handlePriceChange}
+          onChange={(value) =>
+            handlePriceChange(value as ChangeEvent<HTMLInputElement>)
+          }
         />
       </div>
       <div className={styles.formRow}>
@@ -63,7 +75,9 @@ const AddExpense = () => {
           label="Name"
           type="text"
           value={name}
-          onChange={handleNameChange}
+          onChange={(value) =>
+            handleNameChange(value as ChangeEvent<HTMLInputElement>)
+          }
         />
       </div>
       <div className={styles.formRow}>
@@ -71,11 +85,11 @@ const AddExpense = () => {
           label="Date"
           type="date"
           value={date.format("YYYY-MM-DD")}
-          onChange={handleDateChange}
+          onChange={(value) => handleDateChange(value as Dayjs)}
         />
       </div>
       <div className={styles.formControl}>
-        <Button onClick={handleAdd} className={styles.button}>
+        <Button onClick={(e) => handleAdd(e)} className={styles.button}>
           Add
         </Button>
       </div>

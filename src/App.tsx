@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import styles from "./App.module.css";
-import { AppContext } from "./Context/ContextProvider";
-import ExpenseList from "./Components/Containers/ExpenseList/ExpenseList";
-import BudgetGraphs from "./Components/Containers/BudgetGraphs/BudgetGraphs";
-import BudgetChart from "./Components/Containers/BudgetChart/BudgetChart";
-import RecurringExpenseList from "./Components/Containers/RecurringExpenseList/RecurringExpenseList";
+import { AppContext } from "./Context/ContextProvider.tsx";
+import ExpenseList from "./Components/Containers/ExpenseList/ExpenseList.tsx";
+import BudgetGraphs from "./Components/Containers/BudgetGraphs/BudgetGraphs.tsx";
+import BudgetChart from "./Components/Containers/BudgetChart/BudgetChart.tsx";
+import RecurringExpenseList from "./Components/Containers/RecurringExpenseList/RecurringExpenseList.tsx";
 import Button from "./Components/UI/Button/Button.tsx";
 import {
   Select,
@@ -17,7 +17,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./variables.css";
-import { Expense } from "./Types";
+import { Expense } from "./Types/index.ts";
 
 function App() {
   const { showBudgetModalFunc, showExpenseModalFunc, removeMultipleExpenses } =

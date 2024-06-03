@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, MouseEvent } from "react";
 import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
@@ -7,7 +7,7 @@ import styles from "./Button.module.css";
 
 type ButtonProps = {
   children?: ReactNode;
-  onClick?: () => void;
+  onClick?: (event?: MouseEvent<HTMLButtonElement>) => void;
   variant?: MuiButtonProps["variant"];
   color?: MuiButtonProps["color"];
   className?: string;

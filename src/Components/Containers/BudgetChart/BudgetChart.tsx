@@ -1,17 +1,25 @@
-import React, { useContext } from "react";
-import { AppContext } from "../../../Context/ContextProvider";
-import { Box } from "@mui/material";
+import { useContext } from "react";
+import {
+  AppContext,
+  getFrequencyMultiplier,
+} from "../../../Context/ContextProvider";
 import { PieChart } from "@mui/x-charts/PieChart";
 import Legend from "../../UI/Legend/Legend";
 import styles from "./BudgetChart.module.css";
-import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
+
+interface BudgetData {
+  id: number;
+  value: number;
+  label: string;
+  color: string;
+}
 
 const BudgetChart = () => {
   const { state } = useContext(AppContext);
 
-  const calculateBudgetData = () => {
+  const calculateBudgetData = (): BudgetData[] => {
     let totalUsed = 0;
-    const categoryTotals = {};
+    const categoryTotals: { [key: string]: number } = {};
 
     Object.values(state.categories).forEach((category) => {
       categoryTotals[category.id] = 0;

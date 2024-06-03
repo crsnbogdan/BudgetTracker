@@ -5,13 +5,17 @@ import ModalContainer from "../../UI/ModalContainer/ModalContainer";
 import AddRecurringExpense from "../AddRecurringExpense/AddRecurringExpense";
 import Expense from "../../UI/Expense/Expense";
 import styles from "./RecurringExpenseList.module.css";
+import { RemoveRecurringExpensePayload } from "../../../Types";
 
 const RecurringExpenseList = () => {
   const { state, dispatch } = useContext(AppContext);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleDelete = (id) => {
-    dispatch({ type: "removeRecurringExpense", payload: { id } });
+  const handleDelete = (id: String) => {
+    dispatch({
+      type: "removeRecurringExpense",
+      payload: { id } as RemoveRecurringExpensePayload,
+    });
   };
 
   return (

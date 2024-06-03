@@ -4,10 +4,13 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import "./Input.css";
+
 type InputProps = {
   label: string;
   value: string | Dayjs | null;
-  onChange: (value: string | Dayjs | null) => void;
+  onChange: (
+    value: string | Dayjs | null | ChangeEvent<HTMLInputElement>
+  ) => void;
   type: "text" | "date" | "number";
 };
 
@@ -31,9 +34,7 @@ const Input = ({ label, value, onChange, type }: InputProps) => {
         label={label}
         type={type}
         value={value || ""}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          onChange(e.target.value)
-        }
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)}
         variant="outlined"
         fullWidth
       />
