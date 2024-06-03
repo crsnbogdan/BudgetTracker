@@ -7,25 +7,6 @@
   overflow: hidden;
 }
 
-body::-webkit-scrollbar {
-  height: 10px;
-}
-
-body::-webkit-scrollbar-track {
-  background: #1e1e3a;
-  border-radius: 8px;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: #5a67d8;
-  border-radius: 8px;
-  border: 2px solid #2c2c54;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-  background: #434190;
-}
-
 .header {
   display: flex;
   justify-content: space-between;

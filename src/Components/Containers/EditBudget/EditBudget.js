@@ -1,22 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import Input from "../../UI/Input/Input.tsx";
-import Button from "../../UI/Button/Button.tsx";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import styles from "./EditBudget.module.css";
 
 const EditBudget = () => {
-  const { dispatch, showBudgetModal, state, categories } =
-    useContext(AppContext);
+  const { dispatch, state, showBudgetModalFunc } = useContext(AppContext);
   const [totalBudget, setTotalBudget] = useState(state.totalBudget);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryColor, setNewCategoryColor] = useState("#ffffff");
-  const [tempCategories, setTempCategories] = useState({ ...categories });
+  const [tempCategories, setTempCategories] = useState({ ...state.categories });
 
   useEffect(() => {
-    const initialCategories = { ...categories };
+    const initialCategories = { ...state.categories };
     Object.keys(initialCategories).forEach((categoryId) => {
       const category = initialCategories[categoryId];
       const percentage = Number(category.budget);
@@ -25,10 +24,10 @@ const EditBudget = () => {
       );
     });
     setTempCategories(initialCategories);
-  }, [categories, totalBudget]);
+  }, [state.categories, totalBudget]);
 
-  const handleTotalBudgetChange = (event) => {
-    const newTotalBudget = Number(event.target.value);
+  const handleTotalBudgetChange = (value) => {
+    const newTotalBudget = Number(value);
     setTotalBudget(newTotalBudget);
     updateCategoryBudgets(tempCategories, newTotalBudget);
   };
@@ -78,22 +77,27 @@ const EditBudget = () => {
   const handleAddCategory = () => {
     if (newCategoryName && newCategoryColor) {
       const newCategoryId = uuidv4();
-      dispatch({
-        type: "addCategory",
-        payload: {
-          id: newCategoryId,
-          color: newCategoryColor,
-          name: newCategoryName,
-          budget: 0,
-          amount: 0,
-        },
-      });
+      const newCategory = {
+        id: newCategoryId,
+        color: newCategoryColor,
+        name: newCategoryName,
+        budget: 0,
+        amount: 0,
+      };
+      setTempCategories((prevCategories) => ({
+        ...prevCategories,
+        [newCategoryId]: newCategory,
+      }));
       setNewCategoryName("");
       setNewCategoryColor("#ffffff");
     }
   };
 
   const handleRemoveCategory = (categoryId) => {
+    setTempCategories((prevCategories) => {
+      const { [categoryId]: _, ...remainingCategories } = prevCategories;
+      return remainingCategories;
+    });
     dispatch({
       type: "removeCategory",
       payload: {
@@ -119,7 +123,7 @@ const EditBudget = () => {
       },
     });
 
-    showBudgetModal(false);
+    showBudgetModalFunc(false);
   };
 
   const formatValue = (value) =>
@@ -141,7 +145,7 @@ const EditBudget = () => {
         <Input
           label="Total Budget"
           type="number"
-          value={totalBudget}
+          value={totalBudget.toString()}
           onChange={handleTotalBudgetChange}
         />
       </Box>
@@ -176,7 +180,7 @@ const EditBudget = () => {
           label="New Category"
           type="text"
           value={newCategoryName}
-          onChange={(e) => setNewCategoryName(e.target.value)}
+          onChange={setNewCategoryName}
         />
         <input
           type="color"
@@ -208,17 +212,17 @@ const EditBudget = () => {
                 <Input
                   label="Amount"
                   type="number"
-                  value={category.amount || ""}
-                  onChange={(e) =>
-                    handleBudgetAmountChange(categoryId, e.target.value)
+                  value={category.amount ? category.amount.toString() : ""}
+                  onChange={(value) =>
+                    handleBudgetAmountChange(categoryId, value)
                   }
                 />
                 <Input
                   label="Percentage"
                   type="number"
-                  value={category.budget || ""}
-                  onChange={(e) =>
-                    handlePercentageChange(categoryId, e.target.value)
+                  value={category.budget ? category.budget.toString() : ""}
+                  onChange={(value) =>
+                    handlePercentageChange(categoryId, value)
                   }
                 />
                 <Button

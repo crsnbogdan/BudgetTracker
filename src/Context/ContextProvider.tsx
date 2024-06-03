@@ -1,8 +1,28 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, ReactNode } from "react";
+// @ts-ignore
 import uniqid from "uniquid";
 import dayjs from "dayjs";
+import {
+  ExpensesByYear,
+  SingleExpense,
+  Expense,
+  RecurringExpense,
+  Frequency,
+  State,
+  Action,
+  RemoveRecurringExpensePayload,
+  RemoveExpensePayload,
+  UpdateExpensePayload,
+  UpdateFiltersPayload,
+  UpdateBudgetPayload,
+  UpdateCategoriesPayload,
+  SetSelectedExpensePayload,
+  RemoveMultipleExpensesPayload,
+  Category,
+  RemoveCategoryPayload,
+} from "../Types/componentTypes";
 
-const initialExpensesList = [
+const initialExpensesList: Expense[] = [
   {
     id: uniqid(),
     name: "Grocery Shopping",
@@ -111,98 +131,145 @@ const initialExpensesList = [
 ];
 
 const initialCategories = {
-  1: { id: 1, color: "#4DD0E1", budget: "20", name: "Food & Dining" },
-  2: { id: 2, color: "#64B5F6", budget: "10", name: "Utilities" },
-  3: { id: 3, color: "#81C784", budget: "10", name: "Healthcare" },
-  4: { id: 4, color: "#BA68C8", budget: "10", name: "Transportation" },
-  5: { id: 5, color: "#FFD700", budget: "25", name: "Housing & Rent" },
-  6: { id: 6, color: "#FF69B4", budget: "5", name: "Entertainment" },
-  7: { id: 7, color: "#8A2BE2", budget: "10", name: "Savings & Investments" },
-  8: { id: 8, color: "#FF6347", budget: "5", name: "Miscellaneous" },
+  1: {
+    id: "1",
+    color: "#4DD0E1",
+    budget: "20",
+    name: "Food & Dining",
+    used: 0,
+  },
+  2: { id: "2", color: "#64B5F6", budget: "10", name: "Utilities", used: 0 },
+  3: { id: "3", color: "#81C784", budget: "10", name: "Healthcare", used: 0 },
+  4: {
+    id: "4",
+    color: "#BA68C8",
+    budget: "10",
+    name: "Transportation",
+    used: 0,
+  },
+  5: {
+    id: "5",
+    color: "#FFD700",
+    budget: "25",
+    name: "Housing & Rent",
+    used: 0,
+  },
+  6: { id: "6", color: "#FF69B4", budget: "5", name: "Entertainment", used: 0 },
+  7: {
+    id: "7",
+    color: "#8A2BE2",
+    budget: "10",
+    name: "Savings & Investments",
+    used: 0,
+  },
+  8: { id: "8", color: "#FF6347", budget: "5", name: "Miscellaneous", used: 0 },
 };
 
-const initialRecurringExpenses = [
+const initialRecurringExpenses: RecurringExpense[] = [
   {
     id: uniqid(),
     name: "Internet Subscription",
-    amount: 50.0,
+    price: 50.0,
     category: "2",
     startDate: "01/06/2024",
+    date: "01/06/2024",
     frequency: "monthly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Groceries",
-    amount: 100.0,
+    price: 100.0,
     category: "1",
     startDate: "06/06/2024",
+    date: "06/06/2024",
     frequency: "weekly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Car Insurance",
-    amount: 200.0,
+    price: 200.0,
     category: "4",
     startDate: "01/07/2024",
-    frequency: "yearly",
+    date: "01/07/2024",
+    frequency: "monthly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Gym Membership",
-    amount: 30.0,
+    price: 30.0,
     category: "3",
     startDate: "15/06/2024",
+    date: "15/06/2024",
     frequency: "monthly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Gas Refill",
-    amount: 40.0,
+    price: 40.0,
     category: "4",
     startDate: "02/06/2024",
+    date: "02/06/2024",
     frequency: "weekly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Software Subscription",
-    amount: 120.0,
+    price: 120.0,
     category: "8",
     startDate: "01/07/2024",
-    frequency: "yearly",
+    date: "01/07/2024",
+    frequency: "monthly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Phone Bill",
-    amount: 60.0,
+    price: 60.0,
     category: "2",
     startDate: "20/06/2024",
+    date: "20/06/2024",
     frequency: "monthly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
   {
     id: uniqid(),
     name: "Movie Night",
-    amount: 25.0,
+    price: 25.0,
     category: "6",
     startDate: "07/06/2024",
+    date: "07/06/2024",
     frequency: "weekly",
+    onRemove: () => {},
+    categories: initialCategories,
   },
 ];
-const initializeExpenses = (initialExpenses) => {
-  const expenses = {};
+const initializeExpenses = (initialExpenses: Expense[]): ExpensesByYear => {
+  const expenses: ExpensesByYear = {};
   initialExpenses.forEach((expense) => {
-    const date = dayjs(expense.date, "DD-MM-YYYY");
-    const year = date.year();
-    const month = date.month() + 1;
+    const date = dayjs(expense.date, "DD/MM/YYYY");
+    const year = date.year().toString();
+    const month = (date.month() + 1).toString();
 
     if (!expenses[year]) expenses[year] = {};
     if (!expenses[year][month]) expenses[year][month] = [];
-
     expenses[year][month].push(expense);
   });
   return expenses;
 };
 
-const initialState = {
+const initialState: State = {
   expenses: initializeExpenses(initialExpensesList),
   totalBudget: 5000,
   recurringExpenses: initialRecurringExpenses,
@@ -210,18 +277,21 @@ const initialState = {
   showExpenseModal: false,
   showBudgetModal: false,
   showEditExpenseModal: false,
-  selectedExpense: {},
+  selectedExpense: null,
   filters: {
     categories: [],
     dateRange: { startDate: null, endDate: null },
-    priceRange: { minPrice: "", maxPrice: "" },
+    priceRange: { minPrice: null, maxPrice: null },
   },
 };
 
-const addExpenseToState = (expenses, newExpense) => {
-  const date = dayjs(newExpense.date, "DD-MM-YYYY");
-  const year = date.year();
-  const month = date.month() + 1;
+const addExpenseToState = (
+  expenses: ExpensesByYear,
+  newExpense: SingleExpense | RecurringExpense
+) => {
+  const date = dayjs(newExpense.date, "DD/MM/YYYY");
+  const year = date.year().toString();
+  const month = (date.month() + 1).toString();
 
   if (!expenses[year]) expenses[year] = {};
   if (!expenses[year][month]) expenses[year][month] = [];
@@ -230,23 +300,22 @@ const addExpenseToState = (expenses, newExpense) => {
   return { ...expenses };
 };
 
-const removeExpenseFromState = (expenses, expenseId) => {
+const removeExpenseFromState = (
+  expenses: ExpensesByYear,
+  expenseId: string
+) => {
   const updatedExpenses = { ...expenses };
   Object.keys(updatedExpenses).forEach((year) => {
     Object.keys(updatedExpenses[year]).forEach((month) => {
       updatedExpenses[year][month] = updatedExpenses[year][month].filter(
-        (expense) => expense.id !== expenseId
+        (expense: Expense) => expense.id !== expenseId
       );
     });
   });
   return updatedExpenses;
 };
 
-const calculateUsedBudget = (state) => {
-  if (!state || !state.categories) {
-    return {};
-  }
-
+const calculateUsedBudget = (state: State) => {
   const updatedCategories = { ...state.categories };
   for (const key in updatedCategories) {
     updatedCategories[key].used = 0;
@@ -254,7 +323,7 @@ const calculateUsedBudget = (state) => {
 
   Object.keys(state.expenses).forEach((year) => {
     Object.keys(state.expenses[year]).forEach((month) => {
-      state.expenses[year][month].forEach((expense) => {
+      state.expenses[year][month].forEach((expense: Expense) => {
         if (updatedCategories[expense.category]) {
           updatedCategories[expense.category].used += expense.price;
         }
@@ -262,20 +331,20 @@ const calculateUsedBudget = (state) => {
     });
   });
 
-  state.recurringExpenses.forEach((recurringExpense) => {
+  state.recurringExpenses.forEach((recurringExpense: RecurringExpense) => {
     const frequencyMultiplier = getFrequencyMultiplier(
       recurringExpense.frequency
     );
     if (updatedCategories[recurringExpense.category]) {
       updatedCategories[recurringExpense.category].used +=
-        recurringExpense.amount * frequencyMultiplier;
+        recurringExpense.price * frequencyMultiplier;
     }
   });
 
   return updatedCategories;
 };
 
-export const getFrequencyMultiplier = (frequency) => {
+export const getFrequencyMultiplier = (frequency: Frequency) => {
   switch (frequency) {
     case "daily":
       return 30;
@@ -283,29 +352,28 @@ export const getFrequencyMultiplier = (frequency) => {
       return 4;
     case "monthly":
       return 1;
-    case "yearly":
-      return 1 / 12;
     default:
-      return 0;
+      return 30;
   }
 };
 
-const AppReducer = (state, action) => {
-  let updatedState;
+const AppReducer = (state: State, action: Action): State => {
+  let updatedState: State;
   switch (action.type) {
     case "addExpense":
       updatedState = {
         ...state,
         expenses: addExpenseToState(state.expenses, {
-          ...action.payload,
+          ...(action.payload as SingleExpense),
           id: uniqid(),
         }),
       };
       break;
     case "addRecurringExpense":
-      const { startDate, frequency, amount, category } = action.payload;
+      const { startDate, frequency, price, category } =
+        action.payload as RecurringExpense;
       const frequencyMultiplier = getFrequencyMultiplier(frequency);
-      const monthlyAmount = amount * frequencyMultiplier;
+      const monthlyAmount = price * frequencyMultiplier;
 
       const updatedCategories = { ...state.categories };
       if (updatedCategories[category]) {
@@ -314,19 +382,23 @@ const AppReducer = (state, action) => {
 
       updatedState = {
         ...state,
-        recurringExpenses: [...state.recurringExpenses, action.payload],
+        recurringExpenses: [
+          ...state.recurringExpenses,
+          action.payload as RecurringExpense,
+        ],
         categories: updatedCategories,
       };
       break;
 
     case "removeRecurringExpense":
       const removedExpense = state.recurringExpenses.find(
-        (expense) => expense.id === action.payload.id
+        (expense: RecurringExpense) =>
+          expense.id === (action.payload as RemoveRecurringExpensePayload).id
       );
       if (removedExpense) {
-        const { category, amount, frequency } = removedExpense;
+        const { category, price, frequency } = removedExpense;
         const frequencyMultiplier = getFrequencyMultiplier(frequency);
-        const monthlyAmount = amount * frequencyMultiplier;
+        const monthlyAmount = price * frequencyMultiplier;
 
         const updatedCategories = { ...state.categories };
         if (updatedCategories[category]) {
@@ -336,23 +408,30 @@ const AppReducer = (state, action) => {
         updatedState = {
           ...state,
           recurringExpenses: state.recurringExpenses.filter(
-            (expense) => expense.id !== action.payload.id
+            (expense: RecurringExpense) =>
+              expense.id !==
+              (action.payload as RemoveRecurringExpensePayload).id
           ),
           categories: updatedCategories,
         };
+      } else {
+        updatedState = state;
       }
       break;
     case "removeExpense":
       updatedState = {
         ...state,
-        expenses: removeExpenseFromState(state.expenses, action.payload.id),
+        expenses: removeExpenseFromState(
+          state.expenses,
+          (action.payload as RemoveExpensePayload).id
+        ),
       };
       break;
     case "removeMultipleExpenses":
       updatedState = {
         ...state,
-        expenses: action.payload.ids.reduce(
-          (acc, id) => removeExpenseFromState(acc, id),
+        expenses: (action.payload as RemoveMultipleExpensesPayload).ids.reduce(
+          (acc: ExpensesByYear, id: string) => removeExpenseFromState(acc, id),
           state.expenses
         ),
       };
@@ -360,11 +439,14 @@ const AppReducer = (state, action) => {
     case "updateExpense":
       updatedState = {
         ...state,
-        expenses: removeExpenseFromState(state.expenses, action.payload.id),
+        expenses: removeExpenseFromState(
+          state.expenses,
+          (action.payload as UpdateExpensePayload).id
+        ),
       };
       updatedState.expenses = addExpenseToState(
         updatedState.expenses,
-        action.payload
+        action.payload as UpdateExpensePayload
       );
       break;
     case "showExpenseModal":
@@ -406,25 +488,25 @@ const AppReducer = (state, action) => {
     case "setSelectedExpense":
       updatedState = {
         ...state,
-        selectedExpense: action.payload,
+        selectedExpense: action.payload as SetSelectedExpensePayload,
       };
       break;
     case "updateFilters":
       updatedState = {
         ...state,
-        filters: action.payload,
+        filters: action.payload as UpdateFiltersPayload,
       };
       break;
     case "updateBudget":
       updatedState = {
         ...state,
-        totalBudget: action.payload.totalBudget,
+        totalBudget: (action.payload as UpdateBudgetPayload).totalBudget,
       };
       break;
     case "updateCategories":
       updatedState = {
         ...state,
-        categories: action.payload.categories,
+        categories: (action.payload as UpdateCategoriesPayload).categories,
       };
       break;
     case "addCategory":
@@ -434,7 +516,7 @@ const AppReducer = (state, action) => {
         categories: {
           ...state.categories,
           [newCategoryId]: {
-            ...action.payload,
+            ...(action.payload as Category),
             id: newCategoryId,
             used: 0,
           },
@@ -442,18 +524,21 @@ const AppReducer = (state, action) => {
       };
       break;
     case "removeCategory":
-      const { [action.payload.id]: _, ...remainingCategories } =
-        state.categories;
+      const { id } = action.payload as RemoveCategoryPayload;
+      const { [id]: _, ...remainingCategories } = state.categories;
       updatedState = {
         ...state,
         categories: remainingCategories,
-        expenses: removeExpensesWithCategory(state.expenses, action.payload.id),
+        expenses: removeExpensesWithCategory(state.expenses, id),
+        recurringExpenses: state.recurringExpenses.filter(
+          (expense) => expense.category !== id
+        ),
       };
       break;
     case "updateExpenses":
       updatedState = {
         ...state,
-        expenses: action.payload,
+        expenses: action.payload as ExpensesByYear,
       };
       break;
     default:
@@ -467,56 +552,79 @@ const AppReducer = (state, action) => {
   };
 };
 
-const removeExpensesWithCategory = (expenses, categoryId) => {
-  const updatedExpenses = { ...expenses };
+export default AppReducer;
+
+const removeExpensesWithCategory = (
+  expenses: ExpensesByYear,
+  categoryId: string
+): ExpensesByYear => {
+  const updatedExpenses: ExpensesByYear = { ...expenses };
   Object.keys(updatedExpenses).forEach((year) => {
     Object.keys(updatedExpenses[year]).forEach((month) => {
       updatedExpenses[year][month] = updatedExpenses[year][month].filter(
-        (expense) => expense.category !== categoryId
+        (expense: Expense) => expense.category !== categoryId
       );
     });
   });
   return updatedExpenses;
 };
 
-export const AppContext = createContext(initialState);
+export const AppContext = createContext<{
+  state: State;
+  dispatch: React.Dispatch<Action>;
+  showExpenseModalFunc: (show: boolean) => void;
+  showBudgetModalFunc: (show: boolean) => void;
+  showEditExpenseModalFunc: (show: boolean) => void;
+  setSelectedExpense: (payload: SetSelectedExpensePayload) => void;
+  updateFilters: (filters: UpdateFiltersPayload) => void;
+  removeMultipleExpenses: (ids: string[]) => void;
+}>({
+  state: initialState,
+  dispatch: () => null,
+  showExpenseModalFunc: () => {},
+  showBudgetModalFunc: () => {},
+  showEditExpenseModalFunc: () => {},
+  setSelectedExpense: () => {},
+  updateFilters: () => {},
+  removeMultipleExpenses: () => {},
+});
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const showExpenseModal = (show) => {
+  const showExpenseModalFunc = (show: boolean) => {
     if (show) {
-      dispatch({ type: "showExpenseModal" });
+      dispatch({ type: "showExpenseModal", payload: {} });
     } else {
-      dispatch({ type: "hideExpenseModal" });
+      dispatch({ type: "hideExpenseModal", payload: {} });
     }
   };
 
-  const showBudgetModal = (show) => {
+  const showBudgetModalFunc = (show: boolean) => {
     if (show) {
-      dispatch({ type: "showBudgetModal" });
+      dispatch({ type: "showBudgetModal", payload: {} });
     } else {
-      dispatch({ type: "hideBudgetModal" });
+      dispatch({ type: "hideBudgetModal", payload: {} });
     }
   };
 
-  const showEditExpenseModal = (show) => {
+  const showEditExpenseModalFunc = (show: boolean) => {
     if (show) {
-      dispatch({ type: "showEditExpenseModal" });
+      dispatch({ type: "showEditExpenseModal", payload: {} });
     } else {
-      dispatch({ type: "hideEditExpenseModal" });
+      dispatch({ type: "hideEditExpenseModal", payload: {} });
     }
   };
 
-  const setSelectedExpense = (payload) => {
+  const setSelectedExpense = (payload: SetSelectedExpensePayload) => {
     dispatch({ type: "setSelectedExpense", payload });
   };
 
-  const updateFilters = (filters) => {
+  const updateFilters = (filters: UpdateFiltersPayload) => {
     dispatch({ type: "updateFilters", payload: filters });
   };
 
-  const removeMultipleExpenses = (ids) => {
+  const removeMultipleExpenses = (ids: string[]) => {
     dispatch({ type: "removeMultipleExpenses", payload: { ids } });
   };
 
@@ -524,7 +632,7 @@ export const AppProvider = ({ children }) => {
     const now = dayjs();
     let updatedExpenses = { ...state.expenses };
 
-    state.recurringExpenses.forEach((recurringExpense) => {
+    state.recurringExpenses.forEach((recurringExpense: RecurringExpense) => {
       const startDate = dayjs(recurringExpense.startDate, "DD-MM-YYYY");
       let nextOccurrence = startDate;
 
@@ -533,11 +641,14 @@ export const AppProvider = ({ children }) => {
         nextOccurrence.isSame(now, "day")
       ) {
         if (nextOccurrence.isSame(now, "day")) {
-          const newExpense = {
+          const newExpense: SingleExpense = {
             ...recurringExpense,
             date: nextOccurrence.format("DD-MM-YYYY"),
             id: uniqid(),
-            price: recurringExpense.amount,
+            price: recurringExpense.price,
+            onRemove: () => {},
+            onEdit: () => {},
+            categories: state.categories,
           };
           updatedExpenses = addExpenseToState(updatedExpenses, newExpense);
         }
@@ -551,11 +662,6 @@ export const AppProvider = ({ children }) => {
             break;
           case "monthly":
             nextOccurrence = nextOccurrence.add(1, "month");
-            break;
-          case "yearly":
-            nextOccurrence = nextOccurrence.add(1, "year");
-            break;
-          default:
             break;
         }
       }
@@ -571,13 +677,11 @@ export const AppProvider = ({ children }) => {
       value={{
         dispatch,
         state,
-        categories: state.categories,
-        showExpenseModal,
-        showBudgetModal,
-        showEditExpenseModal,
+        showExpenseModalFunc,
+        showBudgetModalFunc,
+        showEditExpenseModalFunc,
         setSelectedExpense,
         updateFilters,
-        selectedExpense: state.selectedExpense,
         removeMultipleExpenses,
       }}
     >

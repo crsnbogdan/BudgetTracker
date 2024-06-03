@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import Button from "../../UI/Button/Button.tsx";
-import ModalContainer from "../../UI/ModalContainer/ModalContainer.tsx";
+import Button from "../../UI/Button/Button";
+import ModalContainer from "../../UI/ModalContainer/ModalContainer";
 import AddRecurringExpense from "../AddRecurringExpense/AddRecurringExpense";
-import Expense from "../../UI/Expense/Expense.tsx";
+import Expense from "../../UI/Expense/Expense";
 import styles from "./RecurringExpenseList.module.css";
 
 const RecurringExpenseList = () => {
@@ -24,7 +24,7 @@ const RecurringExpenseList = () => {
               key={expense.id}
               id={expense.id}
               name={expense.name}
-              price={expense.amount}
+              price={expense.price}
               category={expense.category}
               date={expense.startDate}
               categories={state.categories}

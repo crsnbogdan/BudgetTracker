@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import CategoryFilter from "../../UI/CategoryFilter/CategoryFilter.tsx";
-import DateRangeFilter from "../../UI/DateRangeFilter/DateRangeFilter.tsx";
-import PriceRangeFilter from "../../UI/PriceRangeFilter/PriceRangeFilter.tsx";
+import CategoryFilter from "../../UI/CategoryFilter/CategoryFilter";
+import DateRangeFilter from "../../UI/DateRangeFilter/DateRangeFilter";
+import PriceRangeFilter from "../../UI/PriceRangeFilter/PriceRangeFilter";
 import { AppContext } from "../../../Context/ContextProvider";
 import dayjs from "dayjs";
 import styles from "./Filters.module.css";
@@ -18,47 +18,63 @@ const predefinedRanges = [
 ];
 
 const Filters = () => {
-  const { state, updateFilters } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
   const [selectedRange, setSelectedRange] = useState("custom");
 
   const handleCategoryChange = (event) => {
     const categories = event.target.value;
     const newFilters = { ...state.filters, categories };
-    updateFilters(newFilters);
+    dispatch({ type: "updateFilters", payload: newFilters });
   };
 
-  const handleRangeChange = (value) => {
+  const handleRangeChange = (event) => {
+    const value = event.target.value;
     setSelectedRange(value);
     let startDate = null;
     let endDate = null;
     switch (value) {
       case "thisYear":
-        startDate = dayjs().startOf("year");
-        endDate = dayjs().endOf("year");
+        startDate = dayjs().startOf("year").format("DD-MM-YYYY");
+        endDate = dayjs().endOf("year").format("DD-MM-YYYY");
         break;
       case "last7":
-        startDate = dayjs().subtract(7, "days");
-        endDate = dayjs();
+        startDate = dayjs().subtract(7, "days").format("DD-MM-YYYY");
+        endDate = dayjs().format("DD-MM-YYYY");
         break;
       case "thisMonth":
-        startDate = dayjs().startOf("month");
-        endDate = dayjs().endOf("month");
+        startDate = dayjs().startOf("month").format("DD-MM-YYYY");
+        endDate = dayjs().endOf("month").format("DD-MM-YYYY");
         break;
       case "lastMonth":
-        startDate = dayjs().subtract(1, "month").startOf("month");
-        endDate = dayjs().subtract(1, "month").endOf("month");
+        startDate = dayjs()
+          .subtract(1, "month")
+          .startOf("month")
+          .format("DD-MM-YYYY");
+        endDate = dayjs()
+          .subtract(1, "month")
+          .endOf("month")
+          .format("DD-MM-YYYY");
         break;
       case "today":
-        startDate = dayjs().startOf("day");
-        endDate = dayjs().endOf("day");
+        startDate = dayjs().startOf("day").format("DD-MM-YYYY");
+        endDate = dayjs().endOf("day").format("DD-MM-YYYY");
         break;
       case "yesterday":
-        startDate = dayjs().subtract(1, "day").startOf("day");
-        endDate = dayjs().subtract(1, "day").endOf("day");
+        startDate = dayjs()
+          .subtract(1, "day")
+          .startOf("day")
+          .format("DD-MM-YYYY");
+        endDate = dayjs().subtract(1, "day").endOf("day").format("DD-MM-YYYY");
         break;
       case "lastYear":
-        startDate = dayjs().subtract(1, "year").startOf("year");
-        endDate = dayjs().subtract(1, "year").endOf("year");
+        startDate = dayjs()
+          .subtract(1, "year")
+          .startOf("year")
+          .format("DD-MM-YYYY");
+        endDate = dayjs()
+          .subtract(1, "year")
+          .endOf("year")
+          .format("DD-MM-YYYY");
         break;
       default:
         startDate = null;
@@ -68,7 +84,7 @@ const Filters = () => {
       ...state.filters,
       dateRange: { startDate, endDate },
     };
-    updateFilters(newFilters);
+    dispatch({ type: "updateFilters", payload: newFilters });
   };
 
   const handleStartDateChange = (startDate) => {
@@ -79,7 +95,7 @@ const Filters = () => {
         startDate: dayjs(startDate).format("DD-MM-YYYY"),
       },
     };
-    updateFilters(newFilters);
+    dispatch({ type: "updateFilters", payload: newFilters });
   };
 
   const handleEndDateChange = (endDate) => {
@@ -90,7 +106,7 @@ const Filters = () => {
         endDate: dayjs(endDate).format("DD-MM-YYYY"),
       },
     };
-    updateFilters(newFilters);
+    dispatch({ type: "updateFilters", payload: newFilters });
   };
 
   const handleMinPriceChange = (e) => {
@@ -99,7 +115,7 @@ const Filters = () => {
       ...state.filters,
       priceRange: { ...state.filters.priceRange, minPrice },
     };
-    updateFilters(newFilters);
+    dispatch({ type: "updateFilters", payload: newFilters });
   };
 
   const handleMaxPriceChange = (e) => {
@@ -108,7 +124,7 @@ const Filters = () => {
       ...state.filters,
       priceRange: { ...state.filters.priceRange, maxPrice },
     };
-    updateFilters(newFilters);
+    dispatch({ type: "updateFilters", payload: newFilters });
   };
 
   return (
@@ -116,7 +132,7 @@ const Filters = () => {
       <h2 className={styles.formHeader}>Filters</h2>
       <div className={styles.formRow}>
         <CategoryFilter
-          selectedCategories={state.filters.categories}
+          selectedCategories={state.filters.categories || []}
           handleCategoryChange={handleCategoryChange}
           categories={state.categories}
         />
