@@ -6,7 +6,7 @@ import { SelectChangeEvent } from "@mui/material";
 
 type CategoryFilterProps = {
   selectedCategories: string[];
-  handleCategoryChange: (e: SelectChangeEvent<string | string[]>) => void;
+  handleCategoryChange: (e: SelectChangeEvent<string[] | string>) => void;
   categories: Categories;
 };
 
@@ -21,7 +21,7 @@ const CategoryFilter = ({
         category={selectedCategories}
         categories={categories}
         onChange={handleCategoryChange}
-        multiple={true}
+        multiple
       />
     </div>
   );

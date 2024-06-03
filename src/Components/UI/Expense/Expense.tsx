@@ -4,7 +4,7 @@ import Button from "../Button/Button.tsx";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import styles from "./Expense.module.css";
-import { Expense as ExpenseProps } from "../../../Types";
+import { RecurringExpense, SingleExpense } from "../../../Types";
 
 const Expense = ({
   name,
@@ -19,8 +19,8 @@ const Expense = ({
   multiSelectMode,
   isSmall,
   frequency,
-}: ExpenseProps) => {
-  const formatDateString = (dateString: string | Dayjs) => {
+}: SingleExpense) => {
+  const formatDateString = (dateString: string) => {
     const date = dayjs(dateString, "DD-MM-YYYY");
     return date.format("DD/MM/YYYY");
   };

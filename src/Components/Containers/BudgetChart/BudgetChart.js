@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
 import { Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
-import Legend from "../../UI/Legend/Legend.tsx";
+import Legend from "../../UI/Legend/Legend";
 import styles from "./BudgetChart.module.css";
 import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
 
@@ -32,8 +32,8 @@ const BudgetChart = () => {
         recurringExpense.frequency
       );
       categoryTotals[recurringExpense.category] +=
-        recurringExpense.amount * frequencyMultiplier;
-      totalUsed += recurringExpense.amount * frequencyMultiplier;
+        recurringExpense.price * frequencyMultiplier;
+      totalUsed += recurringExpense.price * frequencyMultiplier;
     });
 
     const data = Object.keys(categoryTotals).map((categoryId, index) => {

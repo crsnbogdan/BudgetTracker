@@ -30,6 +30,18 @@ const CategoryDropdown = ({
 }: CategoryDropdownProps) => {
   const isCategoryArray = Array.isArray(category);
 
+  const renderValue = (selected: string | string[]) => {
+    if (Array.isArray(selected)) {
+      return selected.map((catId) => categories[catId]?.name).join(", ");
+    } else {
+      return categories[selected]?.name || "Select a category";
+    }
+  };
+
+  const handleChange = (event: SelectChangeEvent<string[] | string>) => {
+    onChange(event);
+  };
+
   return (
     <FormControl
       fullWidth
@@ -39,20 +51,20 @@ const CategoryDropdown = ({
       <InputLabel className={styles.formLabel}>{label}</InputLabel>
       <Select
         multiple={multiple}
-        value={category}
-        onChange={onChange}
-        label="Category"
-        renderValue={(selected) =>
+        value={
           multiple
-            ? (selected as string[])
-                .map((catId) => categories[catId]?.name)
-                .join(", ")
-            : categories[selected as string]?.name || "Select a category"
+            ? Array.isArray(category)
+              ? category
+              : []
+            : (category as string)
         }
+        onChange={handleChange}
+        label="Category"
+        renderValue={renderValue}
         className={styles.outlinedInputRoot}
         style={{
           borderColor: isCategoryArray
-            ? categories[category[0]]?.color || "#444"
+            ? categories[(category as string[])[0]]?.color || "#444"
             : categories[category as string]?.color || "#444",
         }}
         MenuProps={{
@@ -69,7 +81,9 @@ const CategoryDropdown = ({
             {multiple ? (
               <>
                 <Checkbox
-                  checked={isCategoryArray && category.includes(catId)}
+                  checked={
+                    isCategoryArray && (category as string[]).includes(catId)
+                  }
                   style={{ color: categories[catId].color }}
                 />
                 <ListItemText primary={categories[catId].name} />

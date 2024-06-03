@@ -1,9 +1,28 @@
 body {
   margin: 0;
-  background-color: #1f1a38 !important;
+  background-color: var(--background-color-app) !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body::-webkit-scrollbar {
+  height: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--background-color-select) !important;
+  border-radius: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--color-button-select-multiple) !important;
+  border-radius: 8px;
+  border: 2px solid var(--background-color-section) !important;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-button-select-multiple-hover) !important;
 }

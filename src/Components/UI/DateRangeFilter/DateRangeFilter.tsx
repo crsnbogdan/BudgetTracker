@@ -5,7 +5,7 @@ import {
   FormControl,
   SelectChangeEvent,
 } from "@mui/material";
-import Input from "../Input/Input.tsx";
+import Input from "../Input/Input";
 import styles from "./DateRangeFilter.module.css";
 import { Dayjs } from "dayjs";
 
@@ -21,7 +21,7 @@ type DateRangeFilterProps = {
     | "lastMonth"
     | "thisYear"
     | "lastYear";
-  onRangeChange: (e: SelectChangeEvent) => void;
+  onRangeChange: (e: SelectChangeEvent<string>) => void;
   onStartDateChange: (value: string | Dayjs | null) => void;
   onEndDateChange: (value: string | Dayjs | null) => void;
   predefinedRanges: {

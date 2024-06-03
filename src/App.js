@@ -12,7 +12,6 @@ import {
   FormControl,
   Switch,
   FormControlLabel,
-  SelectChangeEvent,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -21,8 +20,7 @@ import "./variables.css";
 import { Expense } from "./Types";
 
 function App() {
-  // @ts-ignore
-  const { showBudgetModal, showExpenseModal, removeMultipleExpenses } =
+  const { showBudgetModalFunc, showExpenseModalFunc, removeMultipleExpenses } =
     useContext(AppContext);
 
   // const [multiSelectMode, setMultiSelectMode] = useState<boolean>(false);
@@ -139,16 +137,13 @@ function App() {
 
           <div className={styles.controlSectionContained}>
             <Button
-              // @ts-ignore
-              onClick={() => showBudgetModal(true)}
+              onClick={() => showBudgetModalFunc(true)}
               className={styles.editBudgetButton}
             >
               Edit Budget
             </Button>
             <Button
-              // @ts-ignore
-
-              onClick={() => showExpenseModal(true)}
+              onClick={() => showExpenseModalFunc(true)}
               className={styles.addExpenseButton}
             >
               Add Expense

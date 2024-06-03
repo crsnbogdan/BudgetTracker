@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import ModalContainer from "../../UI/ModalContainer/ModalContainer.tsx";
+import ModalContainer from "../../UI/ModalContainer/ModalContainer";
 import AddExpense from "../AddExpense/AddExpense";
-import EditExpense from "../EditExpense/EditExpense.js";
+import EditExpense from "../EditExpense/EditExpense";
 import EditBudget from "../EditBudget/EditBudget";
 import Filters from "../Filters/Filters";
-import Expense from "../../UI/Expense/Expense.tsx";
-import PersistentPopover from "../../UI/PersistentPopover/PersistentPopover.tsx";
+import Expense from "../../UI/Expense/Expense";
+import PersistentPopover from "../../UI/PersistentPopover/PersistentPopover";
 import dayjs from "dayjs";
 import { IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -17,9 +17,9 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   const {
     state,
     dispatch,
-    showExpenseModal,
-    showBudgetModal,
-    showEditExpenseModal,
+    showExpenseModalFunc,
+    showBudgetModalFunc,
+    showEditExpenseModalFunc,
     setSelectedExpense,
   } = useContext(AppContext);
 
@@ -38,13 +38,13 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   };
 
   const handleRemove = (expense) => {
-    dispatch({ type: "removeExpense", payload: expense });
-    showExpenseModal(false);
+    dispatch({ type: "removeExpense", payload: { id: expense.id } });
+    showExpenseModalFunc(false);
   };
 
   const handleEdit = (expense) => {
     setSelectedExpense(expense);
-    showEditExpenseModal(true);
+    showEditExpenseModalFunc(true);
   };
 
   const handleSort = (key) => {
@@ -124,7 +124,7 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
       {state.showExpenseModal && (
         <ModalContainer
           isOpen={state.showExpenseModal}
-          onClose={() => showExpenseModal(false)}
+          onClose={() => showExpenseModalFunc(false)}
         >
           <AddExpense />
         </ModalContainer>
@@ -132,7 +132,7 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
       {state.showBudgetModal && (
         <ModalContainer
           isOpen={state.showBudgetModal}
-          onClose={() => showBudgetModal(false)}
+          onClose={() => showBudgetModalFunc(false)}
         >
           <EditBudget />
         </ModalContainer>
@@ -140,7 +140,7 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
       {state.showEditExpenseModal && (
         <ModalContainer
           isOpen={state.showEditExpenseModal}
-          onClose={() => showEditExpenseModal(false)}
+          onClose={() => showEditExpenseModalFunc(false)}
         >
           <EditExpense />
         </ModalContainer>

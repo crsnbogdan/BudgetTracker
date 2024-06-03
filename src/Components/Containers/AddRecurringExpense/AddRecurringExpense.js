@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown.tsx";
-import Input from "../../UI/Input/Input.tsx";
-import Button from "../../UI/Button/Button.tsx";
+import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 import dayjs from "dayjs";
-import uniquid from "uniquid";
+import uniqid from "uniquid";
 import styles from "./AddRecurringExpense.module.css";
 
 const AddRecurringExpense = ({ onClose }) => {
-  const { dispatch, categories } = useContext(AppContext);
+  const { dispatch, state } = useContext(AppContext);
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [name, setName] = useState("");
@@ -29,11 +29,11 @@ const AddRecurringExpense = ({ onClose }) => {
 
     const payload = {
       name,
-      amount: Number(amount),
+      price: Number(amount),
       category,
       startDate: expenseStartDate.format("DD-MM-YYYY"),
       frequency,
-      id: uniquid(),
+      id: uniqid(),
     };
 
     dispatch({
@@ -50,7 +50,7 @@ const AddRecurringExpense = ({ onClose }) => {
         <CategoryDropdown
           category={category}
           onChange={handleCategoryChange}
-          categories={categories}
+          categories={state.categories}
         />
       </div>
       <div className={styles.formRow}>

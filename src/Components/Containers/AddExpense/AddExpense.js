@@ -1,23 +1,23 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown.tsx";
-import Input from "../../UI/Input/Input.tsx";
-import Button from "../../UI/Button/Button.tsx";
+import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 import dayjs from "dayjs";
 import styles from "./AddExpense.module.css";
-import uniquid from "uniquid";
+import uniqid from "uniquid";
 
 const AddExpense = () => {
-  const { dispatch, showExpenseModal, categories } = useContext(AppContext);
+  const { dispatch, showExpenseModalFunc, state } = useContext(AppContext);
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [name, setName] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(dayjs());
 
   const handleCategoryChange = (event) => setCategory(event.target.value);
-  const handlePriceChange = (event) => setPrice(event.target.value);
-  const handleNameChange = (event) => setName(event.target.value);
-  const handleDateChange = (newDate) => setDate(dayjs(newDate, "DD-MM-YYYY"));
+  const handlePriceChange = (value) => setPrice(value);
+  const handleNameChange = (value) => setName(value);
+  const handleDateChange = (newDate) => setDate(newDate);
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ const AddExpense = () => {
       price: Number(price),
       category,
       date: expenseDate.format("DD-MM-YYYY"),
-      id: uniquid(),
+      id: uniqid(),
     };
 
     dispatch({
@@ -38,7 +38,7 @@ const AddExpense = () => {
       payload,
     });
 
-    showExpenseModal(false);
+    showExpenseModalFunc(false);
   };
 
   return (
@@ -47,7 +47,7 @@ const AddExpense = () => {
         <CategoryDropdown
           category={category}
           onChange={handleCategoryChange}
-          categories={categories}
+          categories={state.categories}
         />
       </div>
       <div className={styles.formRow}>
@@ -70,7 +70,7 @@ const AddExpense = () => {
         <Input
           label="Date"
           type="date"
-          value={date ? date.format("DD-MM-YYYY") : ""}
+          value={date.format("YYYY-MM-DD")}
           onChange={handleDateChange}
         />
       </div>

@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown.tsx";
-import Input from "../../UI/Input/Input.tsx";
-import Button from "../../UI/Button/Button.tsx";
+import CategoryDropdown from "../../UI/CategoryDropdown/CategoryDropdown";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 import dayjs from "dayjs";
 import styles from "./EditExpense.module.css";
 
 const EditExpense = () => {
-  const { dispatch, showEditExpenseModal, selectedExpense, categories } =
-    useContext(AppContext);
+  const { dispatch, showEditExpenseModalFunc, state } = useContext(AppContext);
+  const selectedExpense = state.selectedExpense;
 
   const [category, setCategory] = useState(selectedExpense?.category || "");
   const [price, setPrice] = useState(selectedExpense?.price?.toString() || "");
@@ -30,9 +30,9 @@ const EditExpense = () => {
 
   const handleCategoryChange = (event) => setCategory(event.target.value);
   const handlePriceChange = (value) => setPrice(value);
-  const handleNameChange = (event) => setName(event);
+  const handleNameChange = (value) => setName(value);
   const handleDateChange = (newDate) => {
-    setDate(dayjs(newDate, "DD-MM-YYYY"));
+    setDate(newDate);
   };
 
   const handleSave = () => {
@@ -47,7 +47,7 @@ const EditExpense = () => {
         date: date.format("DD-MM-YYYY"),
       },
     });
-    showEditExpenseModal(false);
+    showEditExpenseModalFunc(false);
   };
 
   return (
@@ -56,7 +56,7 @@ const EditExpense = () => {
         <CategoryDropdown
           category={category}
           onChange={handleCategoryChange}
-          categories={categories}
+          categories={state.categories}
         />
       </div>
       <div className={styles.formRow}>
@@ -79,7 +79,7 @@ const EditExpense = () => {
         <Input
           label="Date"
           type="date"
-          value={date.format("DD-MM-YYYY")}
+          value={date}
           onChange={handleDateChange}
         />
       </div>

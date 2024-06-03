@@ -1,53 +1,55 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
-import dayjs from "dayjs";
-import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
 import styles from "./BudgetGraphs.module.css";
-
+import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
 const BudgetGraphs = () => {
   const { state } = useContext(AppContext);
 
-  const currentDate = dayjs();
-  const currentYear = currentDate.year();
-  const currentMonth = currentDate.month() + 1;
+  const calculateBudgetData = () => {
+    let totalUsed = 0;
+    const categoryTotals = {};
 
-  const getCategoryBudgetInfo = (categoryId) => {
-    const categoryInfo = state.categories[categoryId];
-    const totalCategoryBudget =
-      (parseFloat(categoryInfo.budget) / 100) * state.totalBudget;
+    Object.values(state.categories).forEach((category) => {
+      categoryTotals[category.id] = 0;
+    });
 
-    let used = 0;
-
-    state.expenses[currentYear][currentMonth].forEach((expense) => {
-      if (expense.category === categoryId) {
-        used += expense.price;
-      }
+    Object.values(state.expenses).forEach((year) => {
+      Object.values(year).forEach((monthExpenses) => {
+        monthExpenses.forEach((expense) => {
+          categoryTotals[expense.category] += expense.price || 0;
+          totalUsed += expense.price || 0;
+        });
+      });
     });
 
     state.recurringExpenses.forEach((recurringExpense) => {
       const frequencyMultiplier = getFrequencyMultiplier(
         recurringExpense.frequency
       );
-      if (recurringExpense.category === categoryId) {
-        used += recurringExpense.amount * frequencyMultiplier;
-      }
+      categoryTotals[recurringExpense.category] +=
+        recurringExpense.price * frequencyMultiplier;
+      totalUsed += recurringExpense.price * frequencyMultiplier;
     });
 
-    return {
-      total: totalCategoryBudget,
-      used,
-      remaining: totalCategoryBudget - used,
-    };
+    return { categoryTotals, totalUsed };
   };
+
+  const { categoryTotals, totalUsed } = calculateBudgetData();
 
   return (
     <div className={styles.budgetTracker}>
       <div className={styles.budgetOverview}>
         {Object.keys(state.categories).map((categoryId) => {
-          const { total, used, remaining } = getCategoryBudgetInfo(categoryId);
-          const usedPercentage = total ? (used / total) * 100 : 0;
+          const category = state.categories[categoryId];
+          const totalCategoryBudget =
+            (parseFloat(category.budget) / 100) * state.totalBudget;
+          const used = categoryTotals[categoryId];
+          const remaining = totalCategoryBudget - used;
+          const usedPercentage = totalCategoryBudget
+            ? (used / totalCategoryBudget) * 100
+            : 0;
           const remainingPercentage = 100 - usedPercentage;
-          const isOverBudget = used > total;
+          const isOverBudget = used > totalCategoryBudget;
 
           return (
             <div key={categoryId} className={styles.budgetCategory}>
@@ -58,7 +60,7 @@ const BudgetGraphs = () => {
                     height: `${usedPercentage}%`,
                     backgroundColor: isOverBudget
                       ? "var(--color-button-remove)"
-                      : state.categories[categoryId].color,
+                      : category.color,
                   }}
                 />
                 {remainingPercentage > 0 && !isOverBudget && (
@@ -78,7 +80,7 @@ const BudgetGraphs = () => {
                     : "#b5b5b5",
                 }}
               >
-                {state.categories[categoryId].name}
+                {category.name}
               </span>
             </div>
           );

@@ -1,7 +1,5 @@
-// src/Types.ts
-import { Dayjs } from "dayjs";
 export type Category = {
-  id: number;
+  id: string;
   color: string;
   budget: string;
   name: string;
@@ -14,69 +12,85 @@ export type Categories = {
 };
 
 export type Expense = {
-  name: string;
-  date: string | Dayjs;
-  price: number;
   category: string;
-  id: string;
-  categories?: Categories;
-  startDate?: string;
-  onEdit?: () => void;
-  onRemove?: () => void;
-  onSelect?: () => void;
-  isSelected?: boolean;
-  multiSelectMode?: boolean;
-  isSmall?: boolean;
-  frequency?: "daily" | "monthly" | "weekly";
-};
-export type Frequency = "daily" | "weekly" | "monthly" | "yearly";
-
-export type RecurringExpense = {
   id: string;
   name: string;
   date: string;
   price: number;
-  category: string;
+};
+
+export type Frequency = "daily" | "monthly" | "weekly";
+
+export type SingleExpense = Expense & {
+  onRemove: () => void;
+  isSmall?: boolean;
+  frequency?: string;
+  categories: Categories;
+  onEdit: () => void;
+  onSelect?: () => void;
+  isSelected?: boolean;
+  multiSelectMode?: boolean;
+};
+
+export type RecurringExpense = Expense & {
+  onRemove: () => void;
+  isSmall?: boolean;
   startDate: string;
   frequency: Frequency;
+  categories: Categories;
 };
 
-export type RecurringExpenses = RecurringExpense[];
+// Define a type alias for expenses organized by year
+export type ExpensesByYear = {
+  [year: string]: { [month: string]: Expense[] };
+};
 
-type AddExpensePayload = Expense;
-type RemoveExpensePayload = { id: string };
-type AddRecurringExpensePayload = Expense & {
-  frequency: "daily" | "monthly" | "weekly" | undefined;
+export type State = {
+  expenses: ExpensesByYear;
+  totalBudget: number;
+  recurringExpenses: RecurringExpense[];
+  categories: Categories;
+  showExpenseModal: boolean;
+  showBudgetModal: boolean;
+  showEditExpenseModal: boolean;
+  selectedExpense: SingleExpense | null;
+  filters: {
+    categories: string[];
+    dateRange: { startDate: string | null; endDate: string | null };
+    priceRange: { minPrice: string | null; maxPrice: string | null };
+  };
 };
-type RemoveRecurringExpensePayload = { id: string };
-type RemoveMultipleExpensesPayload = { ids: string[] };
-type UpdateExpense = AddExpensePayload & {
-  id: string;
+
+export type AddExpensePayload = SingleExpense;
+export type AddRecurringExpensePayload = RecurringExpense;
+export type RemoveExpensePayload = { id: string };
+export type RemoveRecurringExpensePayload = { id: string };
+export type UpdateExpensePayload = SingleExpense;
+export type SetSelectedExpensePayload = SingleExpense;
+export type UpdateFiltersPayload = {
+  categories: string[];
+  dateRange: { startDate: string | null; endDate: string | null };
+  priceRange: { minPrice: string | null; maxPrice: string | null };
 };
-type ShowExpenseModalPayload = true;
-type HideExpenseModalPayload = false;
-type ShowBudgetModalPayload = true;
-type HideBudgetModalPayload = false;
-type ShowEditExpenseModal = true;
-type HideEditExpensePayload = false;
+export type UpdateBudgetPayload = { totalBudget: number };
+export type UpdateCategoriesPayload = { categories: Categories };
+export type RemoveMultipleExpensesPayload = { ids: string[] };
+export type RemoveCategoryPayload = { id: string };
 
 export type ActionPayload =
   | AddExpensePayload
-  | RemoveExpensePayload
   | AddRecurringExpensePayload
+  | RemoveExpensePayload
   | RemoveRecurringExpensePayload
+  | UpdateExpensePayload
+  | SetSelectedExpensePayload
+  | UpdateFiltersPayload
+  | UpdateBudgetPayload
+  | UpdateCategoriesPayload
   | RemoveMultipleExpensesPayload
-  | UpdateExpense
-  | ShowExpenseModalPayload
-  | HideExpenseModalPayload
-  | ShowBudgetModalPayload
-  | HideBudgetModalPayload
-  | ShowEditExpenseModal
-  | HideEditExpensePayload;
-// | SetSelectedExpensePayload
-// | UpdateFiltersPayload
-// | UpdateBudgetPayload
-// | UpdateCategoriesPayload
+  | Category
+  | RemoveCategoryPayload
+  | ExpensesByYear;
 
 export type Action = {
   type:
@@ -84,7 +98,6 @@ export type Action = {
     | "addRecurringExpense"
     | "removeExpense"
     | "removeRecurringExpense"
-    | "removeMultipleExpensesPayload"
     | "updateExpense"
     | "setSelectedExpense"
     | "updateFilters"
@@ -96,28 +109,9 @@ export type Action = {
     | "showBudgetModal"
     | "hideBudgetModal"
     | "showEditExpenseModal"
-    | "hideEditExpenseModal";
+    | "hideEditExpenseModal"
+    | "addCategory"
+    | "removeCategory"
+    | "updateExpenses";
   payload: ActionPayload;
-};
-
-export type State = {
-  expenses: Expense[];
-  totalBudget: number;
-  recurringExpenses: Expense[];
-  categories: Category[];
-  showExpenseModal: boolean;
-  showBudgetModal: boolean;
-  showEditExpenseModal: boolean;
-  selectedExpenses: Expense | null;
-  filters: {
-    categories: Category[];
-    dateRange: {
-      startDate: string | null;
-      endDate: string | null;
-    };
-    priceRange: {
-      minPrice: string;
-      maxPrice: string;
-    };
-  };
 };
