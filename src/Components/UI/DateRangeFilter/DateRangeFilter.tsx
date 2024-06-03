@@ -8,22 +8,16 @@ import {
 import Input from "../Input/Input";
 import styles from "./DateRangeFilter.module.css";
 import { Dayjs } from "dayjs";
+import { ChangeEvent } from "react";
+import { SelectedRange } from "../../../Types";
 
 type DateRangeFilterProps = {
-  startDate: string;
-  endDate: string;
-  selectedRange:
-    | "custom"
-    | "today"
-    | "yesterday"
-    | "last7"
-    | "thisMonth"
-    | "lastMonth"
-    | "thisYear"
-    | "lastYear";
+  startDate: string | Dayjs | null;
+  endDate: string | Dayjs | null;
+  selectedRange: SelectedRange;
   onRangeChange: (e: SelectChangeEvent<string>) => void;
-  onStartDateChange: (value: string | Dayjs | null) => void;
-  onEndDateChange: (value: string | Dayjs | null) => void;
+  onStartDateChange: (value: string | Dayjs | null | ChangeEvent) => void;
+  onEndDateChange: (value: string | Dayjs | null | ChangeEvent) => void;
   predefinedRanges: {
     label: string;
     value: string;

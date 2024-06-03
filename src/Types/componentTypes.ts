@@ -11,6 +11,19 @@ export type Categories = {
   [key: string]: Category;
 };
 
+export type Frequency = "daily" | "monthly" | "weekly";
+
+export type SelectedRange =
+  | "custom"
+  | "today"
+  | "yesterday"
+  | "last7"
+  | "thisMonth"
+  | "lastMonth"
+  | "thisYear"
+  | "lastYear"
+  | string;
+
 export type Expense = {
   category: string;
   id: string;
@@ -18,8 +31,6 @@ export type Expense = {
   date: string;
   price: number;
 };
-
-export type Frequency = "daily" | "monthly" | "weekly";
 
 export type SingleExpense = Expense & {
   onRemove: () => void;
@@ -40,7 +51,22 @@ export type RecurringExpense = Expense & {
   categories: Categories;
 };
 
-// Define a type alias for expenses organized by year
+export type ExpenseProps = {
+  name: any;
+  price: any;
+  category: any;
+  date: string;
+  categories: Categories;
+  onEdit?: () => void;
+  onRemove?: () => void;
+  onSelect?: () => void;
+  isSelected?: boolean;
+  multiSelectMode?: boolean;
+  isSmall?: boolean;
+  frequency?: Frequency;
+  id: string;
+};
+
 export type ExpensesByYear = {
   [year: string]: { [month: string]: Expense[] };
 };

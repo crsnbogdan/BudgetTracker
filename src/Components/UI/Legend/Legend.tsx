@@ -1,14 +1,17 @@
-import { Category } from "../../../Types";
+import React from "react";
 import styles from "./Legend.module.css";
 
-type LegendProps = {
-  data: Category[];
-};
+interface LegendData {
+  id: number;
+  value: number;
+  label: string;
+  color: string;
+}
 
-const Legend = ({ data }: LegendProps) => {
+const Legend = ({ data }: { data: LegendData[] }) => {
   return (
     <div className={styles.legend}>
-      {data.map((entry: Category) => (
+      {data.map((entry) => (
         <div key={entry.id} className={styles.legendItem}>
           <div
             className={styles.legendColor}

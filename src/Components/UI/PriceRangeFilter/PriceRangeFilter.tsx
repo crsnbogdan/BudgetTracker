@@ -3,10 +3,14 @@ import Input from "../Input/Input.tsx";
 import "./PriceRangeFilter.module.css";
 import { Dayjs } from "dayjs";
 type PriceRangeFilterProps = {
-  minPrice: string;
-  maxPrice: string;
-  onMinPriceChange: (e: string | ChangeEvent | Dayjs | null) => void;
-  onMaxPriceChange: (e: string | ChangeEvent | Dayjs | null) => void;
+  minPrice: string | null;
+  maxPrice: string | null;
+  onMinPriceChange: (
+    e: string | ChangeEvent<HTMLInputElement> | Dayjs | null
+  ) => void;
+  onMaxPriceChange: (
+    e: string | ChangeEvent<HTMLInputElement> | Dayjs | null
+  ) => void;
 };
 
 const PriceRangeFilter = ({

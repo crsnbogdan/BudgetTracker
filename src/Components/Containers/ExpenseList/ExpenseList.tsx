@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, MouseEvent } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
 import ModalContainer from "../../UI/ModalContainer/ModalContainer";
 import AddExpense from "../AddExpense/AddExpense";
@@ -12,8 +12,21 @@ import { IconButton } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SortIcon from "@mui/icons-material/Sort";
 import styles from "./ExpenseList.module.css";
+import {
+  UpdateFiltersPayload,
+  ExpensesByYear,
+  SingleExpense,
+} from "../../../Types";
 
-const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
+interface ExpenseListProps {
+  onSelectExpenses: (selectedExpenses: SingleExpense[]) => void;
+  multiSelectMode: boolean;
+}
+
+const ExpenseList = ({
+  onSelectExpenses,
+  multiSelectMode,
+}: ExpenseListProps) => {
   const {
     state,
     dispatch,
@@ -24,30 +37,32 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
   } = useContext(AppContext);
 
   const [filtersVisible, setFiltersVisible] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
-  const [selectedExpenses, setSelectedExpenses] = useState([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  }>({
+    key: "",
+    direction: "",
+  });
+  const [selectedExpenses, setSelectedExpenses] = useState<SingleExpense[]>([]);
 
-  const toggleFilters = (event) => {
+  const toggleFilters = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     setFiltersVisible(!filtersVisible);
   };
 
-  const handleFilterChange = (newFilters) => {
-    dispatch({ type: "updateFilters", payload: newFilters });
-  };
-
-  const handleRemove = (expense) => {
-    dispatch({ type: "removeExpense", payload: { id: expense.id } });
+  const handleRemove = (expenseId: string) => {
+    dispatch({ type: "removeExpense", payload: { id: expenseId } });
     showExpenseModalFunc(false);
   };
 
-  const handleEdit = (expense) => {
+  const handleEdit = (expense: SingleExpense) => {
     setSelectedExpense(expense);
     showEditExpenseModalFunc(true);
   };
 
-  const handleSort = (key) => {
+  const handleSort = (key: string) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
@@ -60,19 +75,49 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
     setSortConfig({ key, direction });
   };
 
-  const flattenExpenses = (expenses) => {
+  const flattenExpenses = (expenses: ExpensesByYear) => {
     return Object.values(expenses).flatMap((year) =>
       Object.values(year).flat()
     );
   };
 
   const sortedExpenses = flattenExpenses(state.expenses).sort((a, b) => {
-    if (sortConfig.direction === "") return 0;
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === "ascending" ? -1 : 1;
+    const { key, direction } = sortConfig;
+    if (direction === "") return 0;
+
+    let compareA: any;
+    let compareB: any;
+
+    switch (key) {
+      case "category":
+        compareA = a.category;
+        compareB = b.category;
+        break;
+      case "id":
+        compareA = a.id;
+        compareB = b.id;
+        break;
+      case "name":
+        compareA = a.name;
+        compareB = b.name;
+        break;
+      case "date":
+        compareA = a.date;
+        compareB = b.date;
+        break;
+      case "price":
+        compareA = a.price;
+        compareB = b.price;
+        break;
+      default:
+        return 0;
     }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === "ascending" ? 1 : -1;
+
+    if (compareA < compareB) {
+      return direction === "ascending" ? -1 : 1;
+    }
+    if (compareA > compareB) {
+      return direction === "ascending" ? 1 : -1;
     }
     return 0;
   });
@@ -98,14 +143,14 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
 
     const matchesPriceRange =
       (!state.filters.priceRange.minPrice ||
-        expense.price >= state.filters.priceRange.minPrice) &&
+        expense.price >= Number(state.filters.priceRange.minPrice)) &&
       (!state.filters.priceRange.maxPrice ||
-        expense.price <= state.filters.priceRange.maxPrice);
+        expense.price <= Number(state.filters.priceRange.maxPrice));
 
     return matchesCategory && matchesDateRange && matchesPriceRange;
   });
 
-  const handleSelectExpense = (expense) => {
+  const handleSelectExpense = (expense: SingleExpense) => {
     setSelectedExpenses((prevSelected) => {
       if (prevSelected.includes(expense)) {
         return prevSelected.filter((exp) => exp !== expense);
@@ -198,12 +243,11 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
           <PersistentPopover
             anchorEl={anchorEl}
             isOpen={filtersVisible}
-            onClose={toggleFilters}
+            onClose={(event, reason) =>
+              toggleFilters(event as MouseEvent<HTMLElement>)
+            }
           >
-            <Filters
-              categories={state.categories}
-              onFilterChange={handleFilterChange}
-            />
+            <Filters />
           </PersistentPopover>
         </div>
       </div>
@@ -217,10 +261,10 @@ const ExpenseList = ({ onSelectExpenses, multiSelectMode }) => {
             category={expense.category}
             date={expense.date}
             categories={state.categories}
-            onEdit={() => handleEdit(expense)}
-            onRemove={() => handleRemove(expense)}
-            onSelect={() => handleSelectExpense(expense)}
-            isSelected={selectedExpenses.includes(expense)}
+            onEdit={() => handleEdit(expense as SingleExpense)}
+            onRemove={() => handleRemove(expense.id)}
+            onSelect={() => handleSelectExpense(expense as SingleExpense)}
+            isSelected={selectedExpenses.includes(expense as SingleExpense)}
             multiSelectMode={multiSelectMode}
           />
         ))}

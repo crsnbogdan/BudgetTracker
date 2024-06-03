@@ -18,7 +18,7 @@ type CategoryDropdownProps = {
   categories: Categories;
   category: string | string[];
   onChange: (e: SelectChangeEvent<string | string[]>) => void;
-  multiple: boolean;
+  multiple?: true;
 };
 
 const CategoryDropdown = ({

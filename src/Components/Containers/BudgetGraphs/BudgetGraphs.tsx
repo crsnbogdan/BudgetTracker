@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import { AppContext } from "../../../Context/ContextProvider";
 import styles from "./BudgetGraphs.module.css";
 import { getFrequencyMultiplier } from "../../../Context/ContextProvider";
+import { State } from "../../../Types";
+
 const BudgetGraphs = () => {
-  const { state } = useContext(AppContext);
+  const { state } = useContext(AppContext) as { state: State };
 
   const calculateBudgetData = () => {
     let totalUsed = 0;
-    const categoryTotals = {};
+    const categoryTotals: { [key: string]: number } = {};
 
     Object.values(state.categories).forEach((category) => {
       categoryTotals[category.id] = 0;
