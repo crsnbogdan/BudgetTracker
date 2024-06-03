@@ -23,13 +23,11 @@ function App() {
   const { showBudgetModalFunc, showExpenseModalFunc, removeMultipleExpenses } =
     useContext(AppContext);
 
-  // const [multiSelectMode, setMultiSelectMode] = useState<boolean>(false);
-  const [multiSelectMode, setMultiSelectMode] = useState(false);
-  // const [selectedExpenses, setSelectedExpenses] = useState<[] | Expense[]>([]);
-  const [selectedExpenses, setSelectedExpenses] = useState([]);
-  // const [visualizationType, setVisualizationType] =
-  //   (useState < "graphs") | ("chart" > "graphs");
-  const [visualizationType, setVisualizationType] = useState();
+  const [multiSelectMode, setMultiSelectMode] = useState<boolean>(false);
+  const [selectedExpenses, setSelectedExpenses] = useState<[] | Expense[]>([]);
+  const [visualizationType, setVisualizationType] = useState<
+    "graphs" | "chart"
+  >("graphs");
   const [darkMode, setDarkMode] = useState(
     () => localStorage.getItem("darkMode") === "true"
   );
@@ -47,8 +45,7 @@ function App() {
     setSelectedExpenses([]);
   };
 
-  // const handleSelectExpenses = (expenses: Expense[]) => {
-  const handleSelectExpenses = (expenses) => {
+  const handleSelectExpenses = (expenses: Expense[]) => {
     setSelectedExpenses(expenses);
   };
 
@@ -60,8 +57,7 @@ function App() {
     setMultiSelectMode(false);
   };
 
-  // const handleVisualizationChange = (str: "graphs" | "chart") => {
-  const handleVisualizationChange = (str) => {
+  const handleVisualizationChange = (str: "graphs" | "chart") => {
     setVisualizationType(str);
   };
 
