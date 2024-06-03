@@ -7,7 +7,7 @@ import styles from "./Button.module.css";
 
 type ButtonProps = {
   children?: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: MuiButtonProps["variant"];
   color?: MuiButtonProps["color"];
   className?: string;

@@ -21,14 +21,17 @@ import "./variables.css";
 import { Expense } from "./Types";
 
 function App() {
+  // @ts-ignore
   const { showBudgetModal, showExpenseModal, removeMultipleExpenses } =
     useContext(AppContext);
 
-  const [multiSelectMode, setMultiSelectMode] = useState<boolean>(false);
-  const [selectedExpenses, setSelectedExpenses] = useState<[] | Expense[]>([]);
-  const [visualizationType, setVisualizationType] = useState<
-    "graphs" | "chart"
-  >("graphs");
+  // const [multiSelectMode, setMultiSelectMode] = useState<boolean>(false);
+  const [multiSelectMode, setMultiSelectMode] = useState(false);
+  // const [selectedExpenses, setSelectedExpenses] = useState<[] | Expense[]>([]);
+  const [selectedExpenses, setSelectedExpenses] = useState([]);
+  // const [visualizationType, setVisualizationType] =
+  //   (useState < "graphs") | ("chart" > "graphs");
+  const [visualizationType, setVisualizationType] = useState();
   const [darkMode, setDarkMode] = useState(
     () => localStorage.getItem("darkMode") === "true"
   );
@@ -46,7 +49,8 @@ function App() {
     setSelectedExpenses([]);
   };
 
-  const handleSelectExpenses = (expenses: Expense[]) => {
+  // const handleSelectExpenses = (expenses: Expense[]) => {
+  const handleSelectExpenses = (expenses) => {
     setSelectedExpenses(expenses);
   };
 
@@ -58,7 +62,8 @@ function App() {
     setMultiSelectMode(false);
   };
 
-  const handleVisualizationChange = (str: "graphs" | "chart") => {
+  // const handleVisualizationChange = (str: "graphs" | "chart") => {
+  const handleVisualizationChange = (str) => {
     setVisualizationType(str);
   };
 
@@ -134,12 +139,15 @@ function App() {
 
           <div className={styles.controlSectionContained}>
             <Button
+              // @ts-ignore
               onClick={() => showBudgetModal(true)}
               className={styles.editBudgetButton}
             >
               Edit Budget
             </Button>
             <Button
+              // @ts-ignore
+
               onClick={() => showExpenseModal(true)}
               className={styles.addExpenseButton}
             >

@@ -1,8 +1,10 @@
-import React, { createContext, useReducer, useEffect } from "react";
+//@ts-nocheck
+import React, { createContext, useReducer, useEffect, ReactNode } from "react";
 import uniqid from "uniquid";
 import dayjs from "dayjs";
+import { Expense, Action, State, RecurringExpense } from "../Types";
 
-const initialExpensesList = [
+const initialExpensesList: Expense[] = [
   {
     id: uniqid(),
     name: "Grocery Shopping",
@@ -187,7 +189,9 @@ const initialRecurringExpenses = [
     frequency: "weekly",
   },
 ];
+//@ts-nocheck
 const initializeExpenses = (initialExpenses) => {
+  console.log(initialExpenses);
   const expenses = {};
   initialExpenses.forEach((expense) => {
     const date = dayjs(expense.date, "DD-MM-YYYY");
@@ -210,7 +214,7 @@ const initialState = {
   showExpenseModal: false,
   showBudgetModal: false,
   showEditExpenseModal: false,
-  selectedExpense: {},
+  selectedExpense: null,
   filters: {
     categories: [],
     dateRange: { startDate: null, endDate: null },
@@ -218,7 +222,10 @@ const initialState = {
   },
 };
 
-const addExpenseToState = (expenses, newExpense) => {
+const addExpenseToState = (
+  expenses: Expense[],
+  newExpense: Expense | RecurringExpense
+) => {
   const date = dayjs(newExpense.date, "DD-MM-YYYY");
   const year = date.year();
   const month = date.month() + 1;
@@ -230,19 +237,19 @@ const addExpenseToState = (expenses, newExpense) => {
   return { ...expenses };
 };
 
-const removeExpenseFromState = (expenses, expenseId) => {
+const removeExpenseFromState = (expenses: Expense[], expenseId: string) => {
   const updatedExpenses = { ...expenses };
   Object.keys(updatedExpenses).forEach((year) => {
     Object.keys(updatedExpenses[year]).forEach((month) => {
       updatedExpenses[year][month] = updatedExpenses[year][month].filter(
-        (expense) => expense.id !== expenseId
+        (expense: Expense) => expense.id !== expenseId
       );
     });
   });
   return updatedExpenses;
 };
 
-const calculateUsedBudget = (state) => {
+const calculateUsedBudget = (state: State) => {
   if (!state || !state.categories) {
     return {};
   }
@@ -254,7 +261,7 @@ const calculateUsedBudget = (state) => {
 
   Object.keys(state.expenses).forEach((year) => {
     Object.keys(state.expenses[year]).forEach((month) => {
-      state.expenses[year][month].forEach((expense) => {
+      state.expenses[year][month].forEach((expense: Expense) => {
         if (updatedCategories[expense.category]) {
           updatedCategories[expense.category].used += expense.price;
         }
@@ -263,19 +270,22 @@ const calculateUsedBudget = (state) => {
   });
 
   state.recurringExpenses.forEach((recurringExpense) => {
+    console.log("recurringExpense", recurringExpense);
     const frequencyMultiplier = getFrequencyMultiplier(
       recurringExpense.frequency
     );
     if (updatedCategories[recurringExpense.category]) {
       updatedCategories[recurringExpense.category].used +=
-        recurringExpense.amount * frequencyMultiplier;
+        recurringExpense.price * frequencyMultiplier;
     }
   });
 
   return updatedCategories;
 };
 
-export const getFrequencyMultiplier = (frequency) => {
+export const getFrequencyMultiplier = (
+  frequency: "daily" | "weekly" | "monthly" | undefined
+) => {
   switch (frequency) {
     case "daily":
       return 30;
@@ -283,14 +293,13 @@ export const getFrequencyMultiplier = (frequency) => {
       return 4;
     case "monthly":
       return 1;
-    case "yearly":
-      return 1 / 12;
+
     default:
       return 0;
   }
 };
 
-const AppReducer = (state, action) => {
+const AppReducer = (state: State, action: Action) => {
   let updatedState;
   switch (action.type) {
     case "addExpense":
@@ -303,9 +312,9 @@ const AppReducer = (state, action) => {
       };
       break;
     case "addRecurringExpense":
-      const { startDate, frequency, amount, category } = action.payload;
+      const { frequency, price, category } = action.payload;
       const frequencyMultiplier = getFrequencyMultiplier(frequency);
-      const monthlyAmount = amount * frequencyMultiplier;
+      const monthlyAmount = price * frequencyMultiplier;
 
       const updatedCategories = { ...state.categories };
       if (updatedCategories[category]) {
@@ -318,15 +327,21 @@ const AppReducer = (state, action) => {
         categories: updatedCategories,
       };
       break;
+    case "removeExpense":
+      updatedState = {
+        ...state,
+        expenses: removeExpenseFromState(state.expenses, action.payload.id),
+      };
+      break;
 
     case "removeRecurringExpense":
       const removedExpense = state.recurringExpenses.find(
-        (expense) => expense.id === action.payload.id
+        (expense: Expense) => expense.id === action.payload.id
       );
       if (removedExpense) {
-        const { category, amount, frequency } = removedExpense;
+        const { category, price, frequency } = removedExpense;
         const frequencyMultiplier = getFrequencyMultiplier(frequency);
-        const monthlyAmount = amount * frequencyMultiplier;
+        const monthlyAmount = price * frequencyMultiplier;
 
         const updatedCategories = { ...state.categories };
         if (updatedCategories[category]) {
@@ -336,23 +351,17 @@ const AppReducer = (state, action) => {
         updatedState = {
           ...state,
           recurringExpenses: state.recurringExpenses.filter(
-            (expense) => expense.id !== action.payload.id
+            (expense: Expense) => expense.id !== action.payload.id
           ),
           categories: updatedCategories,
         };
       }
       break;
-    case "removeExpense":
-      updatedState = {
-        ...state,
-        expenses: removeExpenseFromState(state.expenses, action.payload.id),
-      };
-      break;
     case "removeMultipleExpenses":
       updatedState = {
         ...state,
         expenses: action.payload.ids.reduce(
-          (acc, id) => removeExpenseFromState(acc, id),
+          (acc: Expense[], id: string) => removeExpenseFromState(acc, id),
           state.expenses
         ),
       };
@@ -467,12 +476,15 @@ const AppReducer = (state, action) => {
   };
 };
 
-const removeExpensesWithCategory = (expenses, categoryId) => {
+const removeExpensesWithCategory = (
+  expenses: Expense[],
+  categoryId: string
+) => {
   const updatedExpenses = { ...expenses };
   Object.keys(updatedExpenses).forEach((year) => {
     Object.keys(updatedExpenses[year]).forEach((month) => {
       updatedExpenses[year][month] = updatedExpenses[year][month].filter(
-        (expense) => expense.category !== categoryId
+        (expense: Expense) => expense.category !== categoryId
       );
     });
   });
@@ -481,10 +493,10 @@ const removeExpensesWithCategory = (expenses, categoryId) => {
 
 export const AppContext = createContext(initialState);
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const showExpenseModal = (show) => {
+  const showExpenseModal = (show: boolean) => {
     if (show) {
       dispatch({ type: "showExpenseModal" });
     } else {
@@ -492,7 +504,7 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const showBudgetModal = (show) => {
+  const showBudgetModal = (show: boolean) => {
     if (show) {
       dispatch({ type: "showBudgetModal" });
     } else {
@@ -500,7 +512,7 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const showEditExpenseModal = (show) => {
+  const showEditExpenseModal = (show: boolean) => {
     if (show) {
       dispatch({ type: "showEditExpenseModal" });
     } else {
@@ -516,7 +528,7 @@ export const AppProvider = ({ children }) => {
     dispatch({ type: "updateFilters", payload: filters });
   };
 
-  const removeMultipleExpenses = (ids) => {
+  const removeMultipleExpenses = (ids: string[]) => {
     dispatch({ type: "removeMultipleExpenses", payload: { ids } });
   };
 
@@ -524,7 +536,8 @@ export const AppProvider = ({ children }) => {
     const now = dayjs();
     let updatedExpenses = { ...state.expenses };
 
-    state.recurringExpenses.forEach((recurringExpense) => {
+    state.recurringExpenses.forEach((recurringExpense: RecurringExpense) => {
+      console.log(recurringExpense);
       const startDate = dayjs(recurringExpense.startDate, "DD-MM-YYYY");
       let nextOccurrence = startDate;
 
@@ -537,7 +550,7 @@ export const AppProvider = ({ children }) => {
             ...recurringExpense,
             date: nextOccurrence.format("DD-MM-YYYY"),
             id: uniqid(),
-            price: recurringExpense.amount,
+            price: recurringExpense.price,
           };
           updatedExpenses = addExpenseToState(updatedExpenses, newExpense);
         }
@@ -551,9 +564,6 @@ export const AppProvider = ({ children }) => {
             break;
           case "monthly":
             nextOccurrence = nextOccurrence.add(1, "month");
-            break;
-          case "yearly":
-            nextOccurrence = nextOccurrence.add(1, "year");
             break;
           default:
             break;
